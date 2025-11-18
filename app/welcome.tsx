@@ -36,7 +36,7 @@ const WelcomeScreen = () => {
   const pagerRef = useRef<PagerView>(null);
 
   const handleGetStarted = () => {
-    router.replace('/(tabs)');
+    router.replace('/auth/signin' as any);
   };
 
   const handleNext = () => {
@@ -48,7 +48,7 @@ const WelcomeScreen = () => {
   };
 
   const handleSignIn = () => {
-    router.push('/(tabs)');
+    router.push('/auth/signin' as any);
   };
 
   const renderContent = (item: typeof onboardingData[0], index: number) => (

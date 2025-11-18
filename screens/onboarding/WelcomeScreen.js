@@ -71,8 +71,8 @@ const WelcomeScreen = ({ navigation }) => {
           <View style={styles.signInContainer}>
             <Text style={styles.signInText}>Already have account? </Text>
             <TouchableOpacity onPress={handleSignIn}>
-              <Text style={styles.signInLink}>Sing in</Text>
-            </TouchableOpacity>
+                <Text style={styles.signInLink}>Sign in</Text>
+              </TouchableOpacity>
           </View>
         </View>
       </LinearGradient>

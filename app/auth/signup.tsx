@@ -24,7 +24,9 @@ const SignUpScreen = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [acceptedPrivacy, setAcceptedPrivacy] = useState(false);
 
-  const { register } = useAuth();
+  // Temporarily bypass actual register calls to avoid network issues during development
+  // When ready, re-enable the useAuth register method
+  // const { register } = useAuth();
 
   const handleSignUp = async () => {
     if (!fullName || !email || !phone || !password) {
@@ -37,25 +39,12 @@ const SignUpScreen = () => {
       return;
     }
 
+    // Dummy flow: simulate a short delay and go to main app
     setIsLoading(true);
-    try {
-      const result = await register({
-        name: fullName,
-        email,
-        phone,
-        password,
-      });
-      
-      if (result.success) {
-        router.replace('/(tabs)');
-      } else {
-        Alert.alert('Error', result.error || 'Sign up failed');
-      }
-    } catch (error) {
-      Alert.alert('Error', 'Something went wrong. Please try again.');
-    } finally {
+    setTimeout(() => {
       setIsLoading(false);
-    }
+      router.replace('/(tabs)');
+    }, 300);
   };
 
   const handleSocialSignIn = (provider: string) => {
@@ -76,7 +65,7 @@ const SignUpScreen = () => {
           <View style={styles.content}>
             {/* Header */}
             <View style={styles.header}>
-              <Text style={styles.title}>Sing Up</Text>
+              <Text style={styles.title}>Sign Up</Text>
             </View>
 
             {/* Form */}

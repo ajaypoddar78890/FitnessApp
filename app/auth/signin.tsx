@@ -21,27 +21,23 @@ const SignInScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const { login } = useAuth();
+  // Temporarily bypass actual auth calls to avoid network issues during development
+  // When ready, re-enable the useAuth login method
+  // const { login } = useAuth();
 
   const handleSignIn = async () => {
+    // Basic client-side validation
     if (!email || !password) {
       Alert.alert('Error', 'Please fill in all fields');
       return;
     }
 
+    // Dummy flow: simulate a small delay and go to the main app - bypass network
     setIsLoading(true);
-    try {
-      const result = await login(email, password);
-      if (result.success) {
-        router.replace('/(tabs)');
-      } else {
-        Alert.alert('Error', result.error || 'Sign in failed');
-      }
-    } catch (error) {
-      Alert.alert('Error', 'Something went wrong. Please try again.');
-    } finally {
+    setTimeout(() => {
       setIsLoading(false);
-    }
+      router.replace('/(tabs)');
+    }, 300);
   };
 
   const handleForgotPassword = () => {
@@ -67,7 +63,7 @@ const SignInScreen = () => {
           <View style={styles.content}>
             {/* Header */}
             <View style={styles.header}>
-              <Text style={styles.title}>Sing In</Text>
+              <Text style={styles.title}>Sign In</Text>
             </View>
 
             {/* Form */}
@@ -116,7 +112,7 @@ const SignInScreen = () => {
                 disabled={isLoading}
               >
                 <Text style={styles.signInButtonText}>
-                  {isLoading ? 'Signing In...' : 'Sing In'}
+                  {isLoading ? 'Signing In...' : 'Sign In'}
                 </Text>
               </TouchableOpacity>
 

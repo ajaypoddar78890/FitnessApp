@@ -110,7 +110,7 @@ const WelcomeScreen = () => {
             <View style={styles.signInContainer}>
               <Text style={styles.signInText}>Already have account? </Text>
               <TouchableOpacity onPress={handleSignIn}>
-                <Text style={styles.signInLink}>Sing in</Text>
+                <Text style={styles.signInLink}>Sign in</Text>
               </TouchableOpacity>
             </View>
           )}

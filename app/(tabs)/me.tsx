@@ -8,7 +8,7 @@ import { Colors } from '@/constants/theme';
 
 export default function MeTab() {
   const { user } = useAuth();
-  const name = user?.name || 'Deborah Moore';
+  const name = user?.name || 'Ajay poddar';
   const avatar = user?.avatar || null;
   const weight = user?.weight || '55 kg';
   const height = user?.height || '167 cm';
@@ -27,7 +27,7 @@ export default function MeTab() {
           {avatar ? (
             <Image source={{ uri: avatar }} style={styles.avatar} />
           ) : (
-            <View style={styles.placeholder} />
+            <View  style={styles.placeholder} />
           )}
         </View>
         <ThemedText type="title" style={styles.userName}>{name}</ThemedText>

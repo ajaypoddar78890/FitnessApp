@@ -11,6 +11,7 @@ export default function TabLayout() {
 
   return (
     <Tabs
+      initialRouteName={"devices"}
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tabIconSelected,
         tabBarInactiveTintColor: Colors[colorScheme ?? 'light'].tabIconDefault,
@@ -42,8 +43,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="devices"
         options={{
-          title: 'Devices',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="devices.fill" color={color} />,
+          title: 'Activity',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="target" color={color} />,
         }}
       />
       <Tabs.Screen

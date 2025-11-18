@@ -20,6 +20,7 @@ const MAPPING = {
   'chevron.right': 'chevron-right',
   'dumbbell.fill': 'fitness-center',
   'devices.fill': 'devices',
+  'target': 'center-focus-strong',
   'person.fill': 'person',
 } as IconMapping;
 

@@ -8,7 +8,7 @@ import { AuthProvider } from '../context/AuthContext';
 import { WorkoutProvider } from '../context/WorkoutContext';
 
 export const unstable_settings = {
-  anchor: '(tabs)',
+  initialRouteName: 'welcome',
 };
 
 export default function RootLayout() {
@@ -19,6 +19,7 @@ export default function RootLayout() {
       <WorkoutProvider>
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
           <Stack>
+            <Stack.Screen name="welcome" options={{ headerShown: false }} />
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
           </Stack>

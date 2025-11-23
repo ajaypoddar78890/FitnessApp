@@ -5,200 +5,260 @@ import {
   StyleSheet,
   ScrollView,
   SafeAreaView,
-  RefreshControl,
+  TextInput,
   TouchableOpacity,
+  FlatList,
+  Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
 
-import { useAuth } from '../../context/AuthContext';
-import { useWorkout } from '../../context/WorkoutContext';
-import { useUserStats } from '../../hooks/useUser';
-import WorkoutCard from '../../components/workout/WorkoutCard';
-import StatsCard from '../../components/stats/StatsCard';
-import { colors, spacing, typography } from '../../theme';
+const { width } = Dimensions.get('window');
 
 const HomeScreen = ({ navigation }) => {
-  const { user } = useAuth();
-  const { workouts, isLoading: workoutsLoading } = useWorkout();
-  const { stats, isLoading: statsLoading, loadStats } = useUserStats();
-  const [refreshing, setRefreshing] = useState(false);
+  const [searchText, setSearchText] = useState('');
 
-  const recentWorkouts = workouts.slice(0, 3);
-  const todayStats = {
-    workoutsCompleted: stats?.dailyProgress?.[6]?.workouts || 0,
-    totalTime: stats?.dailyProgress?.[6]?.minutes || 0,
-    caloriesBurned: stats?.dailyProgress?.[6]?.calories || 0,
-    streak: user?.streak || 0,
-  };
+  const categories = [
+    { id: 1, name: 'Cardio', icon: '🔥', color: '#FFB800' },
+    { id: 2, name: 'Yoga', icon: '🧘‍♀️', color: '#00D4FF' },
+    { id: 3, name: 'Stretch', icon: '🏋️', color: '#FFB800' },
+    { id: 4, name: 'Gym', icon: '🏆', color: '#FFD700' },
+  ];
 
-  const onRefresh = async () => {
-    setRefreshing(true);
-    try {
-      await loadStats();
-    } catch (error) {
-      console.error('Error refreshing data:', error);
-    } finally {
-      setRefreshing(false);
-    }
+  const popularWorkouts = [
+    {
+      id: '1',
+      title: 'Rapid Lower Body',
+      level: 'Beginner',
+      duration: '42 min',
+      image: '🏃‍♀️',
+    },
+    {
+      id: '2',
+      title: 'Bodyweight Strength',
+      level: 'Beginner',
+      duration: '25 min',
+      image: '💪',
+    },
+  ];
+
+  const exercises = [
+    {
+      id: '1',
+      name: 'Front and Back Lunge',
+      duration: '0:30',
+      icon: '🏃‍♀️',
+    },
+    {
+      id: '2',
+      name: 'Side Plank',
+      duration: '0:30',
+      icon: '🤸‍♀️',
+    },
+    {
+      id: '3',
+      name: 'Arm circles',
+      duration: '0:30',
+      icon: '🔄',
+    },
+    {
+      id: '4',
+      name: 'Sumo Squat',
+      duration: '0:30',
+      icon: '🏋️‍♀️',
+    },
+  ];
+
+  const handleCategoryPress = (category) => {
+    router.push({ pathname: '/(tabs)/workouts', params: { category: category.name } });
   };
 
   const handleWorkoutPress = (workout) => {
-    navigation.navigate('Workouts', {
-      screen: 'WorkoutDetail',
-      params: { workout },
+    router.push({
+      pathname: '/workout-details',
+      params: {
+        id: workout.id,
+        title: workout.title,
+        level: workout.level,
+        duration: workout.duration,
+      }
     });
   };
 
-  const renderGreeting = () => {
-    const hour = new Date().getHours();
-    let greeting = 'Good morning';
-    if (hour >= 12 && hour < 17) greeting = 'Good afternoon';
-    else if (hour >= 17) greeting = 'Good evening';
-
-    return (
-      <View style={styles.greeting}>
-        <Text style={styles.greetingText}>
-          {greeting}, {user?.name || 'Fitness Enthusiast'}!
-        </Text>
-        <Text style={styles.motivationText}>
-          Ready to crush your fitness goals today?
-        </Text>
-      </View>
-    );
+  const handleExercisePress = (exercise) => {
+    router.push({
+      pathname: '/exercise-details',
+      params: { exerciseName: exercise.name }
+    });
   };
 
-  const renderTodayStats = () => (
-    <View style={styles.todayStats}>
-      <Text style={styles.sectionTitle}>Today's Progress</Text>
-      <View style={styles.statsGrid}>
-        <View style={styles.statItem}>
-          <View style={[styles.statIcon, { backgroundColor: colors.primary }]}>
-            <Ionicons name="fitness" size={20} color={colors.white} />
-          </View>
-          <Text style={styles.statValue}>{todayStats.workoutsCompleted}</Text>
-          <Text style={styles.statLabel}>Workouts</Text>
-        </View>
-        
-        <View style={styles.statItem}>
-          <View style={[styles.statIcon, { backgroundColor: colors.success }]}>
-            <Ionicons name="time" size={20} color={colors.white} />
-          </View>
-          <Text style={styles.statValue}>
-            {todayStats.totalTime < 60 
-              ? `${todayStats.totalTime}min` 
-              : `${Math.floor(todayStats.totalTime / 60)}h ${todayStats.totalTime % 60}min`
-            }
-          </Text>
-          <Text style={styles.statLabel}>Active Time</Text>
-        </View>
-        
-        <View style={styles.statItem}>
-          <View style={[styles.statIcon, { backgroundColor: colors.warning }]}>
-            <Ionicons name="flame" size={20} color={colors.white} />
-          </View>
-          <Text style={styles.statValue}>{todayStats.caloriesBurned}</Text>
-          <Text style={styles.statLabel}>Calories</Text>
-        </View>
-        
-        <View style={styles.statItem}>
-          <View style={[styles.statIcon, { backgroundColor: colors.error }]}>
-            <Ionicons name="trophy" size={20} color={colors.white} />
-          </View>
-          <Text style={styles.statValue}>{todayStats.streak}</Text>
-          <Text style={styles.statLabel}>Day Streak</Text>
-        </View>
-      </View>
-    </View>
+  const renderCategoryCard = ({ item }) => (
+    <TouchableOpacity 
+      style={styles.categoryCard}
+      onPress={() => handleCategoryPress(item)}
+      activeOpacity={0.8}
+    >
+      <Text style={styles.categoryIcon}>{item.icon}</Text>
+      <Text style={styles.categoryName}>{item.name}</Text>
+    </TouchableOpacity>
   );
 
-  const renderQuickActions = () => (
-    <View style={styles.quickActions}>
-      <Text style={styles.sectionTitle}>Quick Actions</Text>
-      <View style={styles.actionsGrid}>
-        <TouchableOpacity 
-          style={styles.actionButton}
-          onPress={() => navigation.navigate('Workouts', { screen: 'CreateWorkout' })}
-        >
-          <Ionicons name="add" size={24} color={colors.primary} />
-          <Text style={styles.actionText}>New Workout</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity 
-          style={styles.actionButton}
-          onPress={() => navigation.navigate('Stats')}
-        >
-          <Ionicons name="bar-chart" size={24} color={colors.success} />
-          <Text style={styles.actionText}>View Stats</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity 
-          style={styles.actionButton}
-          onPress={() => navigation.navigate('Profile')}
-        >
-          <Ionicons name="person" size={24} color={colors.warning} />
-          <Text style={styles.actionText}>Profile</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity 
-          style={styles.actionButton}
-          onPress={() => navigation.navigate('Workouts')}
-        >
-          <Ionicons name="list" size={24} color={colors.error} />
-          <Text style={styles.actionText}>All Workouts</Text>
+  const renderWorkoutCard = ({ item }) => (
+    <TouchableOpacity 
+      style={styles.workoutCard}
+      onPress={() => handleWorkoutPress(item)}
+      activeOpacity={0.8}
+    >
+      <View style={styles.workoutImageContainer}>
+        <Text style={styles.workoutEmoji}>{item.image}</Text>
+        <TouchableOpacity style={styles.favoriteButton}>
+          <Ionicons name="heart-outline" size={20} color="#fff" />
         </TouchableOpacity>
       </View>
-    </View>
+      <View style={styles.workoutInfo}>
+        <Text style={styles.workoutTitle}>{item.title}</Text>
+        <View style={styles.workoutMeta}>
+          <Text style={styles.workoutLevel}>{item.level}</Text>
+          <Text style={styles.workoutDuration}>• {item.duration}</Text>
+        </View>
+      </View>
+    </TouchableOpacity>
   );
 
-  const renderRecentWorkouts = () => (
-    <View style={styles.recentWorkouts}>
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>Recent Workouts</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Workouts')}>
-          <Text style={styles.seeAllText}>See All</Text>
-        </TouchableOpacity>
+  const renderExerciseItem = ({ item }) => (
+    <TouchableOpacity 
+      style={styles.exerciseItem}
+      onPress={() => handleExercisePress(item)}
+      activeOpacity={0.8}
+    >
+      <View style={styles.exerciseIcon}>
+        <Text style={styles.exerciseEmoji}>{item.icon}</Text>
       </View>
-      
-      {recentWorkouts.length > 0 ? (
-        recentWorkouts.map((workout) => (
-          <WorkoutCard
-            key={workout.id}
-            workout={workout}
-            onPress={handleWorkoutPress}
-          />
-        ))
-      ) : (
-        <View style={styles.emptyState}>
-          <Ionicons name="fitness-outline" size={48} color={colors.text.secondary} />
-          <Text style={styles.emptyStateText}>No workouts yet</Text>
-          <TouchableOpacity 
-            style={styles.createFirstWorkout}
-            onPress={() => navigation.navigate('Workouts', { screen: 'CreateWorkout' })}
-          >
-            <Text style={styles.createFirstWorkoutText}>Create your first workout</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-    </View>
+      <View style={styles.exerciseInfo}>
+        <Text style={styles.exerciseName}>{item.name}</Text>
+        <Text style={styles.exerciseDuration}>{item.duration}</Text>
+      </View>
+      <TouchableOpacity style={styles.exerciseInfoButton}>
+        <Ionicons name="information-circle-outline" size={24} color="#8e8e93" />
+      </TouchableOpacity>
+    </TouchableOpacity>
   );
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView
+      <ScrollView 
         style={styles.scrollView}
-        contentContainerStyle={styles.scrollContent}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            tintColor={colors.primary}
-          />
-        }
+        showsVerticalScrollIndicator={false}
+        bounces={true}
       >
-        {renderGreeting()}
-        {renderTodayStats()}
-        {renderQuickActions()}
-        {renderRecentWorkouts()}
+        {/* Header with greeting and notification */}
+        <View style={styles.header}>
+          <View>
+            <Text style={styles.greeting}>Hi , Poddar</Text>
+          </View>
+          <TouchableOpacity 
+            style={styles.notificationButton}
+            onPress={() => router.push('/notifications')}
+          >
+            <Ionicons name="notifications-outline" size={24} color="#fff" />
+          </TouchableOpacity>
+        </View>
+
+        {/* Search Bar */}
+        <View style={styles.searchContainer}>
+          <View style={styles.searchBar}>
+            <Ionicons name="search" size={20} color="#9662F1" style={styles.searchIcon} />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search something"
+              placeholderTextColor="#8e8e93"
+              value={searchText}
+              onChangeText={setSearchText}
+            />
+          </View>
+        </View>
+
+        {/* Category Section */}
+        <View style={styles.sectionContainer}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Category</Text>
+            <TouchableOpacity onPress={() => router.push('/(tabs)/workouts')}>
+              <Text style={styles.viewAllText}>View All</Text>
+            </TouchableOpacity>
+          </View>
+          <FlatList
+            data={categories}
+            renderItem={renderCategoryCard}
+            keyExtractor={(item) => item.id.toString()}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.categoriesContainer}
+          />
+        </View>
+
+        {/* Featured Workout */}
+        <View style={styles.featuredSection}>
+          <TouchableOpacity style={styles.featuredCard} activeOpacity={0.8}>
+            <View style={styles.featuredContent}>
+              <View style={styles.featuredLeft}>
+                <Text style={styles.featuredTitle}>Full Body Toning{'\n'}Workout</Text>
+                <Text style={styles.featuredDescription}>
+                  Includes circuits to work{'\n'}every muscle
+                </Text>
+                <TouchableOpacity style={styles.startButton}>
+                  <LinearGradient
+                    colors={['#9662F1', '#7c3aed']}
+                    style={styles.startButtonGradient}
+                  >
+                    <Text style={styles.startButtonText}>Start Training</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.featuredRight}>
+                <View style={styles.featuredImage}>
+                  <Text style={styles.mountainIcon}>⛰️</Text>
+                </View>
+              </View>
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        {/* Popular Workouts Section */}
+        <View style={styles.sectionContainer}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Popular Workouts</Text>
+            <TouchableOpacity onPress={() => router.push('/(tabs)/workouts')}>
+              <Text style={styles.viewAllText}>View All</Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.workoutsCount}>Workouts: 80</Text>
+          <FlatList
+            data={popularWorkouts}
+            renderItem={renderWorkoutCard}
+            keyExtractor={(item) => item.id}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.workoutsContainer}
+          />
+        </View>
+
+        {/* Exercises Section */}
+        <View style={styles.sectionContainer}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Exercises</Text>
+            <TouchableOpacity onPress={() => router.push('/(tabs)/workouts')}>
+              <Text style={styles.viewAllText}>View All</Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.exercisesCount}>Exercises: 210</Text>
+          <FlatList
+            data={exercises}
+            renderItem={renderExerciseItem}
+            keyExtractor={(item) => item.id}
+            scrollEnabled={false}
+          />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -207,134 +267,252 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: '#000000',
   },
   scrollView: {
     flex: 1,
   },
-  scrollContent: {
-    paddingHorizontal: spacing.md,
-    paddingBottom: spacing.xl,
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 10,
+    paddingBottom: 20,
   },
   greeting: {
-    marginVertical: spacing.lg,
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#ffffff',
   },
-  greetingText: {
-    ...typography.h2,
-    color: colors.text.primary,
-    marginBottom: spacing.xs,
+  notificationButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    backgroundColor: '#3d3d4d',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  motivationText: {
-    ...typography.body,
-    color: colors.text.secondary,
+  searchContainer: {
+    paddingHorizontal: 20,
+    marginBottom: 20,
   },
-  sectionTitle: {
-    ...typography.h3,
-    color: colors.text.primary,
-    marginBottom: spacing.md,
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2D3450',
+    borderRadius: 15,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  searchIcon: {
+    marginRight: 10,
+  },
+  searchInput: {
+    flex: 1,
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '400',
+  },
+  sectionContainer: {
+    marginBottom: 30,
+    paddingHorizontal: 20,
   },
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: spacing.md,
+    marginBottom: 15,
   },
-  seeAllText: {
-    ...typography.body,
-    color: colors.primary,
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#ffffff',
+  },
+  viewAllText: {
+    fontSize: 16,
+    color: '#9662F1',
     fontWeight: '600',
   },
-  todayStats: {
-    backgroundColor: colors.surface,
+  categoriesContainer: {
+    paddingLeft: 0,
+  },
+  categoryCard: {
+    backgroundColor: '#2D3450',
+    width: 80,
+    height: 80,
     borderRadius: 12,
-    padding: spacing.md,
-    marginBottom: spacing.lg,
-    shadowColor: colors.shadow,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  statsGrid: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  statItem: {
-    alignItems: 'center',
-    flex: 1,
-  },
-  statIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: spacing.sm,
+    marginRight: 15,
   },
-  statValue: {
-    ...typography.h4,
-    color: colors.text.primary,
+  categoryIcon: {
+    fontSize: 24,
+    marginBottom: 5,
+  },
+  categoryName: {
+    fontSize: 12,
     fontWeight: '600',
-    marginBottom: spacing.xs,
+    color: '#ffffff',
   },
-  statLabel: {
-    ...typography.caption,
-    color: colors.text.secondary,
-    textAlign: 'center',
+  featuredSection: {
+    paddingHorizontal: 20,
+    marginBottom: 30,
   },
-  quickActions: {
-    marginBottom: spacing.lg,
+  featuredCard: {
+    backgroundColor: '#2D3450',
+    borderRadius: 16,
+    overflow: 'hidden',
   },
-  actionsGrid: {
+  featuredContent: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  actionButton: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: spacing.md,
     alignItems: 'center',
-    width: '48%',
-    marginBottom: spacing.md,
-    shadowColor: colors.shadow,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    padding: 20,
   },
-  actionText: {
-    ...typography.caption,
-    color: colors.text.primary,
-    marginTop: spacing.sm,
+  featuredLeft: {
+    flex: 1,
+    paddingRight: 20,
+  },
+  featuredTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#ffffff',
+    marginBottom: 8,
+    lineHeight: 24,
+  },
+  featuredDescription: {
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.7)',
+    marginBottom: 16,
+    lineHeight: 18,
+  },
+  startButton: {
+    alignSelf: 'flex-start',
+  },
+  startButtonGradient: {
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 25,
+  },
+  startButtonText: {
+    color: '#ffffff',
+    fontSize: 14,
     fontWeight: '600',
   },
-  recentWorkouts: {
-    marginBottom: spacing.lg,
-  },
-  emptyState: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: spacing.xl,
+  featuredRight: {
     alignItems: 'center',
-    marginTop: spacing.md,
+    justifyContent: 'center',
   },
-  emptyStateText: {
-    ...typography.body,
-    color: colors.text.secondary,
-    marginVertical: spacing.md,
-    textAlign: 'center',
+  featuredImage: {
+    width: 80,
+    height: 80,
+    backgroundColor: '#9662F1',
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  createFirstWorkout: {
-    backgroundColor: colors.primary,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
+  mountainIcon: {
+    fontSize: 40,
+  },
+  workoutsCount: {
+    fontSize: 12,
+    color: 'rgba(255, 255, 255, 0.6)',
+    marginBottom: 15,
+  },
+  workoutsContainer: {
+    paddingLeft: 0,
+  },
+  workoutCard: {
+    width: (width - 60) / 2,
+    backgroundColor: '#1a1a1a',
+    borderRadius: 12,
+    marginRight: 15,
+    overflow: 'hidden',
+  },
+  workoutImageContainer: {
+    height: 120,
+    backgroundColor: '#e5e5e5',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+  },
+  workoutEmoji: {
+    fontSize: 40,
+  },
+  favoriteButton: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  workoutInfo: {
+    padding: 12,
+  },
+  workoutTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#ffffff',
+    marginBottom: 4,
+  },
+  workoutMeta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  workoutLevel: {
+    fontSize: 12,
+    color: '#9662F1',
+    fontWeight: '600',
+  },
+  workoutDuration: {
+    fontSize: 12,
+    color: 'rgba(255, 255, 255, 0.6)',
+    marginLeft: 4,
+  },
+  exercisesCount: {
+    fontSize: 12,
+    color: 'rgba(255, 255, 255, 0.6)',
+    marginBottom: 15,
+  },
+  exerciseItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2D3450',
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 12,
+  },
+  exerciseIcon: {
+    width: 50,
+    height: 50,
+    backgroundColor: '#9662F1',
     borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
   },
-  createFirstWorkoutText: {
-    ...typography.body,
-    color: colors.white,
+  exerciseEmoji: {
+    fontSize: 24,
+  },
+  exerciseInfo: {
+    flex: 1,
+  },
+  exerciseName: {
+    fontSize: 16,
     fontWeight: '600',
+    color: '#ffffff',
+    marginBottom: 2,
+  },
+  exerciseDuration: {
+    fontSize: 12,
+    color: 'rgba(255, 255, 255, 0.6)',
+  },
+  exerciseInfoButton: {
+    padding: 4,
   },
 });
 

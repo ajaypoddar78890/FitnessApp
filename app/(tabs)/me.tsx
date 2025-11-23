@@ -58,7 +58,9 @@ export default function MeTab() {
           <TouchableOpacity style={styles.cardRow} onPress={() => router.push('/my-workouts')}>
             <ThemedText>My workouts 🚀</ThemedText>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.cardRow}><ThemedText>Workout reminders</ThemedText></TouchableOpacity>
+          <TouchableOpacity style={styles.cardRow} onPress={() => router.push('/workout-reminders')}>
+            <ThemedText>Workout reminders</ThemedText>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.cardRow} onPress={logout}><ThemedText>Log out</ThemedText></TouchableOpacity>
         </View>
 

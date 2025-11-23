@@ -13,7 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/themed-text';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
@@ -78,13 +78,15 @@ const workoutData: WorkoutCard[] = [
 ];
 
 export default function WorkoutsTab() {
+  const params = useLocalSearchParams();
+  const { category } = params;
   const [searchText, setSearchText] = useState('');
-  const [filteredWorkouts, setFilteredWorkouts] = useState(workoutData);
+  const [filteredWorkouts, setFilteredWorkouts] = useState(workoutData.filter(w => (category ? w.category === category : true)));
 
   const handleSearch = (text: string) => {
     setSearchText(text);
     if (text === '') {
-      setFilteredWorkouts(workoutData);
+      setFilteredWorkouts(workoutData.filter(w => (category ? w.category === category : true)));
     } else {
       const filtered = workoutData.filter(workout =>
         workout.title.toLowerCase().includes(text.toLowerCase()) ||

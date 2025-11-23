@@ -95,23 +95,7 @@ export default function DeviceActivity() {
           Activity
         </ThemedText>
 
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.datesRow} contentContainerStyle={{ paddingRight: 8 }}>
-          {[
-            { day: '12', month: 'Nov', active: true },
-            { day: '13', month: 'Nov' },
-            { day: '14', month: 'Nov' },
-            { day: '15', month: 'Nov' },
-            { day: '16', month: 'Nov' },
-          ].map((d, i) => (
-            <LinearGradient
-              key={`${d.day}-${i}`}
-              colors={d.active ? ['#7A4BFF', '#9B6BFF'] : ['#2C2F3A', '#2C2F3A']}
-              style={[styles.dateChip, d.active ? styles.dateChipActive : null]}>
-              <ThemedText style={[styles.dateText, d.active ? styles.dateTextActive : null]}>{d.day}</ThemedText>
-              <ThemedText style={[styles.dateSub, d.active ? styles.dateTextActive : null]}>{d.month}</ThemedText>
-            </LinearGradient>
-          ))}
-        </ScrollView>
+        
 
         <View style={styles.grid}>
           {/* Steps */}

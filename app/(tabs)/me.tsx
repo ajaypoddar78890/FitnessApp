@@ -1,13 +1,14 @@
 import React from 'react';
 import { StyleSheet, View, Image, TouchableOpacity, Switch, ScrollView } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
+import { router } from 'expo-router';
 import { ThemedView } from '@/components/themed-view';
 import { useAuth } from '@/context/AuthContext';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Colors } from '@/constants/theme';
 
 export default function MeTab() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const name = user?.name || 'Ajay poddar';
   const avatar = user?.avatar || null;
   const weight = user?.weight || '55 kg';
@@ -51,10 +52,12 @@ export default function MeTab() {
         </TouchableOpacity>
 
         <View style={styles.card}>
-          <TouchableOpacity style={styles.cardRow}><ThemedText>Account</ThemedText></TouchableOpacity>
+          <TouchableOpacity style={styles.cardRow} onPress={() => router.push('/account-info')}>
+            <ThemedText>Account</ThemedText>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.cardRow}><ThemedText>My workouts 🚀</ThemedText></TouchableOpacity>
           <TouchableOpacity style={styles.cardRow}><ThemedText>Workout reminders</ThemedText></TouchableOpacity>
-          <TouchableOpacity style={styles.cardRow}><ThemedText>Log out</ThemedText></TouchableOpacity>
+          <TouchableOpacity style={styles.cardRow} onPress={logout}><ThemedText>Log out</ThemedText></TouchableOpacity>
         </View>
 
         <ThemedText style={styles.settingsHeader}>Settings</ThemedText>

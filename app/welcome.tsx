@@ -17,8 +17,8 @@ const { width, height } = Dimensions.get('window');
 const onboardingData = [
   {
     title: 'Welcome',
-    subtitle: 'to FitooZone',
-    description: 'FitooZone has workouts on demand that you can find based on how much time you have',
+    subtitle: 'to Fitlabzz',
+    description: 'Fitlabzz has workouts on demand that you can find based on how much time you have',
     image: require('../assets/images/onboaring1.webp'),
   },
   {

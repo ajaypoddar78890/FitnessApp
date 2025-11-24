@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -41,7 +41,7 @@ const workoutData: WorkoutCard[] = [
     level: 'Beginner',
     duration: '30 min',
     image: require('../../assets/images/onboaring2.webp'),
-    category: 'Strength'
+    category: 'Gym'
   },
   {
     id: '3',
@@ -54,10 +54,10 @@ const workoutData: WorkoutCard[] = [
   {
     id: '4',
     title: 'HIIT Workout',
-    level: 'Beginner',
+    level: 'Intermediate',
     duration: '25 min',
     image: require('../../assets/images/onboaring1.webp'),
-    category: 'HIIT'
+    category: 'Cardio'
   },
   {
     id: '5',
@@ -69,11 +69,43 @@ const workoutData: WorkoutCard[] = [
   },
   {
     id: '6',
-    title: 'Full Body',
+    title: 'Full Body Stretch',
     level: 'Beginner',
     duration: '45 min',
     image: require('../../assets/images/onboaring3.webp'),
-    category: 'Full Body'
+    category: 'Stretch'
+  },
+  {
+    id: '7',
+    title: 'Evening Yoga',
+    level: 'Intermediate',
+    duration: '35 min',
+    image: require('../../assets/images/onboaring1.webp'),
+    category: 'Yoga'
+  },
+  {
+    id: '8',
+    title: 'Power Lifting',
+    level: 'Advanced',
+    duration: '50 min', 
+    image: require('../../assets/images/onboaring2.webp'),
+    category: 'Gym'
+  },
+  {
+    id: '9',
+    title: 'Fat Burn Cardio',
+    level: 'Intermediate',
+    duration: '28 min',
+    image: require('../../assets/images/onboaring3.webp'),
+    category: 'Cardio'
+  },
+  {
+    id: '10',
+    title: 'Flexibility Training',
+    level: 'Beginner',
+    duration: '18 min',
+    image: require('../../assets/images/onboaring1.webp'),
+    category: 'Stretch'
   },
 ];
 
@@ -81,14 +113,28 @@ export default function WorkoutsTab() {
   const params = useLocalSearchParams();
   const { category } = params;
   const [searchText, setSearchText] = useState('');
-  const [filteredWorkouts, setFilteredWorkouts] = useState(workoutData.filter(w => (category ? w.category === category : true)));
+  const [filteredWorkouts, setFilteredWorkouts] = useState(
+    category ? workoutData.filter(w => w.category === category) : workoutData
+  );
+
+  // Update filtered workouts when category changes
+  useEffect(() => {
+    console.log('Category changed:', category);
+    console.log('Total workouts:', workoutData.length);
+    const filtered = category ? workoutData.filter(w => w.category === category) : workoutData;
+    console.log('Filtered workouts:', filtered.length);
+    setFilteredWorkouts(filtered);
+    setSearchText(''); // Reset search when category changes
+  }, [category]);
 
   const handleSearch = (text: string) => {
     setSearchText(text);
+    let baseWorkouts = category ? workoutData.filter(w => w.category === category) : workoutData;
+    
     if (text === '') {
-      setFilteredWorkouts(workoutData.filter(w => (category ? w.category === category : true)));
+      setFilteredWorkouts(baseWorkouts);
     } else {
-      const filtered = workoutData.filter(workout =>
+      const filtered = baseWorkouts.filter(workout =>
         workout.title.toLowerCase().includes(text.toLowerCase()) ||
         workout.category.toLowerCase().includes(text.toLowerCase()) ||
         workout.level.toLowerCase().includes(text.toLowerCase())
@@ -199,6 +245,16 @@ export default function WorkoutsTab() {
             showsVerticalScrollIndicator={false}
             scrollEnabled={false}
             ItemSeparatorComponent={() => <View style={styles.separator} />}
+            ListEmptyComponent={() => (
+              <View style={styles.emptyContainer}>
+                <ThemedText style={styles.emptyText}>
+                  No workouts found {category ? `for category: ${category}` : ''}
+                </ThemedText>
+                <ThemedText style={styles.emptySubtext}>
+                  Total available: {workoutData.length} | Filtered: {filteredWorkouts.length}
+                </ThemedText>
+              </View>
+            )}
           />
         </View>
       </ScrollView>
@@ -378,5 +434,23 @@ const styles = StyleSheet.create({
     color: 'rgba(255, 255, 255, 0.6)',
     fontSize: 12,
     fontWeight: '400',
+  },
+  emptyContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 40,
+  },
+  emptyText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  emptySubtext: {
+    color: 'rgba(255, 255, 255, 0.6)',
+    fontSize: 14,
+    textAlign: 'center',
   },
 });

@@ -1,18 +1,18 @@
+import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  TouchableOpacity,
-  TextInput,
   Alert,
   KeyboardAvoidingView,
   Platform,
+  SafeAreaView,
   ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
 import { useAuth } from '../../context/AuthContext';
 
 const SignInScreen = () => {
@@ -21,23 +21,39 @@ const SignInScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  // Temporarily bypass actual auth calls to avoid network issues during development
-  // When ready, re-enable the useAuth login method
-  // const { login } = useAuth();
+  const { login } = useAuth();
 
   const handleSignIn = async () => {
+    console.log('👤 User attempted to log in');
+    
     // Basic client-side validation
     if (!email || !password) {
       Alert.alert('Error', 'Please fill in all fields');
       return;
     }
 
-    // Dummy flow: simulate a small delay and go to the main app - bypass network
     setIsLoading(true);
-    setTimeout(() => {
+    
+    try {
+      console.log('🔐 Starting signin process...');
+      console.log('📧 Email:', email);
+      console.log('🔗 Calling login API...');
+      
+      const result = await login(email, password);
+      
+      if (result.success) {
+        console.log('✅ Login successful! Navigating to main app...');
+        router.replace('/(tabs)');
+      } else {
+        console.log('❌ Login failed:', result.error);
+        Alert.alert('Login Failed', result.error || 'Please check your credentials and try again');
+      }
+    } catch (error) {
+      console.log('🚨 Login error:', error);
+      Alert.alert('Error', 'Network error. Please check your connection and try again.');
+    } finally {
       setIsLoading(false);
-      router.replace('/(tabs)');
-    }, 300);
+    }
   };
 
   const handleForgotPassword = () => {

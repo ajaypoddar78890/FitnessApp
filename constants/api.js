@@ -1,5 +1,8 @@
 // API Configuration
-export const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'https://api.fitnessapp.com/v1';
+// For Android emulator: http://10.0.2.2:4000
+// For iOS simulator: http://localhost:4000
+// For physical device: use your computer's IP address (e.g., http://192.168.1.100:4000)
+export const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://192.168.1.34:4000';
 
 // API Endpoints
 export const API_ENDPOINTS = {

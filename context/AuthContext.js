@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Alert } from 'react-native';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { authApi } from '../api/authApi';
 import { storageService } from '../storage/storageService';
 
@@ -46,16 +45,24 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(true);
       const response = await authApi.login(email, password);
       
-      if (response.token && response.user) {
-        await storageService.saveToken(response.token);
+      // Handle both 'token' and 'accessToken' from backend
+      const token = response.token || response.accessToken;
+      
+      if (token && response.user) {
+        await storageService.saveToken(token);
         await storageService.saveUser(response.user);
         
-        setToken(response.token);
+        setToken(token);
         setUser(response.user);
         setIsAuthenticated(true);
         
         return { success: true };
       } else {
+        console.log('❌ Missing required fields in response:', {
+          hasToken: !!token,
+          hasUser: !!response.user,
+          responseKeys: Object.keys(response)
+        });
         throw new Error('Invalid response from server');
       }
     } catch (error) {
@@ -74,16 +81,24 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(true);
       const response = await authApi.register(userData);
       
-      if (response.token && response.user) {
-        await storageService.saveToken(response.token);
+      // Handle both 'token' and 'accessToken' from backend
+      const token = response.token || response.accessToken;
+      
+      if (token && response.user) {
+        await storageService.saveToken(token);
         await storageService.saveUser(response.user);
         
-        setToken(response.token);
+        setToken(token);
         setUser(response.user);
         setIsAuthenticated(true);
         
         return { success: true };
       } else {
+        console.log('❌ Missing required fields in registration response:', {
+          hasToken: !!token,
+          hasUser: !!response.user,
+          responseKeys: Object.keys(response)
+        });
         throw new Error('Invalid response from server');
       }
     } catch (error) {

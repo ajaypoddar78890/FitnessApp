@@ -1,138 +1,181 @@
-import { API_BASE_URL } from '../constants/api';
+import { API_BASE_URL, API_ENDPOINTS } from '../constants/api';
 
-const USER_ENDPOINTS = {
-  PROFILE: '/user/profile',
-  STATS: '/user/stats',
-  GOALS: '/user/goals',
-  ACHIEVEMENTS: '/user/achievements',
-};
-
+/**
+ * User API service functions
+ */
 export const userApi = {
-  getProfile: async (token) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}${USER_ENDPOINTS.PROFILE}`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch profile');
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Get profile error:', error);
-      throw error;
+  /**
+   * Get user statistics
+   * @param {string} token - Authentication token
+   * @param {string} period - Time period for stats (e.g., 'week', 'month', 'year')
+   * @returns {Promise<{stats: object}>}
+   */
+  async getStats(token, period = 'week') {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.USER.STATS}?period=${period}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch user stats: ${response.statusText}`);
     }
+
+    return response.json();
   },
 
-  updateProfile: async (token, profileData) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}${USER_ENDPOINTS.PROFILE}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(profileData),
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to update profile');
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Update profile error:', error);
-      throw error;
+  /**
+   * Get user goals
+   * @param {string} token - Authentication token
+   * @returns {Promise<{goals: Array}>}
+   */
+  async getGoals(token) {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.USER.GOALS}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch user goals: ${response.statusText}`);
     }
+
+    return response.json();
   },
 
-  getStats: async (token, period = 'week') => {
-    try {
-      const response = await fetch(`${API_BASE_URL}${USER_ENDPOINTS.STATS}?period=${period}`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch stats');
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Get stats error:', error);
-      throw error;
+  /**
+   * Update user goals
+   * @param {string} token - Authentication token
+   * @param {Array} goals - Updated goals data
+   * @returns {Promise<{goals: Array}>}
+   */
+  async updateGoals(token, goals) {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.USER.GOALS}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ goals }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to update user goals: ${response.statusText}`);
     }
+
+    return response.json();
   },
 
-  getGoals: async (token) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}${USER_ENDPOINTS.GOALS}`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch goals');
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Get goals error:', error);
-      throw error;
+  /**
+   * Get user profile
+   * @param {string} token - Authentication token
+   * @returns {Promise<{profile: object}>}
+   */
+  async getProfile(token) {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.USER.PROFILE}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch user profile: ${response.statusText}`);
     }
+
+    return response.json();
   },
 
-  updateGoals: async (token, goals) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}${USER_ENDPOINTS.GOALS}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(goals),
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to update goals');
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Update goals error:', error);
-      throw error;
+  /**
+   * Update user profile
+   * @param {string} token - Authentication token
+   * @param {object} profileData - Updated profile data
+   * @returns {Promise<{profile: object}>}
+   */
+  async updateProfile(token, profileData) {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.USER.PROFILE}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(profileData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to update user profile: ${response.statusText}`);
     }
+
+    return response.json();
   },
 
-  getAchievements: async (token) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}${USER_ENDPOINTS.ACHIEVEMENTS}`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch achievements');
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Get achievements error:', error);
-      throw error;
+  /**
+   * Get user achievements
+   * @param {string} token - Authentication token
+   * @returns {Promise<{achievements: Array}>}
+   */
+  async getAchievements(token) {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.USER.ACHIEVEMENTS}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch user achievements: ${response.statusText}`);
     }
+
+    return response.json();
+  },
+
+  /**
+   * Get user preferences
+   * @param {string} token - Authentication token
+   * @returns {Promise<{preferences: object}>}
+   */
+  async getPreferences(token) {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.USER.PREFERENCES}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch user preferences: ${response.statusText}`);
+    }
+
+    return response.json();
+  },
+
+  /**
+   * Update user preferences
+   * @param {string} token - Authentication token
+   * @param {object} preferences - Updated preferences data
+   * @returns {Promise<{preferences: object}>}
+   */
+  async updatePreferences(token, preferences) {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.USER.PREFERENCES}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(preferences),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to update user preferences: ${response.statusText}`);
+    }
+
+    return response.json();
   },
 };

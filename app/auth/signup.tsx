@@ -1,19 +1,19 @@
+import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  TouchableOpacity,
-  TextInput,
   Alert,
   KeyboardAvoidingView,
   Platform,
+  SafeAreaView,
   ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
-import { useAuth } from '../../context/AuthContext';
+import { signUp as apiSignUp } from '../../api/authApi';
 
 const SignUpScreen = () => {
   const [fullName, setFullName] = useState('');
@@ -24,8 +24,8 @@ const SignUpScreen = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [acceptedPrivacy, setAcceptedPrivacy] = useState(false);
 
-  // Temporarily bypass actual register calls to avoid network issues during development
-  // When ready, re-enable the useAuth register method
+  // If you have an auth context with a register method you can use it instead.
+  // For now we call the centralized API helper directly.
   // const { register } = useAuth();
 
   const handleSignUp = async () => {
@@ -39,12 +39,22 @@ const SignUpScreen = () => {
       return;
     }
 
-    // Dummy flow: simulate a short delay and go to main app
+    // Call backend signup endpoint
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      console.log('SignUp Screen: Starting signup process...');
+      const result = await apiSignUp(email, password, fullName);
+      console.log('SignUp Screen: Signup successful:', result);
+      // result is expected to contain at least user/accessToken depending on backend
+      // Navigate into the app on success
       router.replace('/(tabs)');
-    }, 300);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error('SignUp Screen: Signup failed:', msg);
+      Alert.alert('Signup failed', msg);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSocialSignIn = (provider: string) => {

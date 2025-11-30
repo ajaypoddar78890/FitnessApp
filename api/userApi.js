@@ -178,4 +178,60 @@ export const userApi = {
 
     return response.json();
   },
+
+  /**
+   * Get user fitness profile
+   * @param {string} token - Authentication token
+   * @returns {Promise<{profile: object}>}
+   */
+  async getFitnessProfile(token) {
+    console.log('🏃‍♂️ Getting fitness profile...');
+    const response = await fetch(`${API_BASE_URL}/auth/profile/fitness`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    console.log('📡 Fitness profile response status:', response.status);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch fitness profile: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log('📦 Fitness profile data:', data);
+    return data;
+  },
+
+  /**
+   * Update user fitness profile
+   * @param {string} token - Authentication token
+   * @param {object} profileData - Updated profile data
+   * @returns {Promise<{profile: object}>}
+   */
+  async updateFitnessProfile(token, profileData) {
+    console.log('🏃‍♂️ Updating fitness profile...', profileData);
+    const response = await fetch(`${API_BASE_URL}/auth/profile/fitness`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(profileData),
+    });
+
+    console.log('📡 Update fitness profile response status:', response.status);
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.log('❌ Update fitness profile error:', errorData);
+      throw new Error(errorData.message || `Failed to update fitness profile: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log('✅ Fitness profile updated:', data);
+    return data;
+  },
 };

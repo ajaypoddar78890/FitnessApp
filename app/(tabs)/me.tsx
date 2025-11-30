@@ -1,22 +1,57 @@
-import React from 'react';
-import { StyleSheet, View, Image, TouchableOpacity, Switch, ScrollView } from 'react-native';
+import { userApi } from '@/api/userApi';
 import { ThemedText } from '@/components/themed-text';
-import { router } from 'expo-router';
 import { ThemedView } from '@/components/themed-view';
+import { Colors } from '@/constants/theme';
 import { useAuth } from '@/context/AuthContext';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Colors } from '@/constants/theme';
+import { router } from 'expo-router';
+import { useFocusEffect } from '@react-navigation/native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { ActivityIndicator, Image, ScrollView, StyleSheet, Switch, TouchableOpacity, View } from 'react-native';
 
 export default function MeTab() {
-  const { user, logout } = useAuth();
-  const name = user?.name || 'Ajay poddar';
-  const avatar = user?.avatar || null;
-  const weight = user?.weight || '55 kg';
-  const height = user?.height || '167 cm';
-  const age = user?.age || '26 Years';
+  const { user, logout, token } = useAuth();
+  const [profile, setProfile] = useState<any>({});
+  const [isLoadingProfile, setIsLoadingProfile] = useState(true);
   const [pinLock, setPinLock] = React.useState(true);
   const [appleHealth, setAppleHealth] = React.useState(true);
   const [darkMode, setDarkMode] = React.useState(true);
+
+  // Get display values from user data and profile
+  const name = user?.name || 'User';
+  const avatar = user?.avatar || null;
+  const weight = profile && profile.weight !== undefined && profile.weight !== null ? `${profile.weight} kg` : 'Set weight';
+  const height = profile && profile.height !== undefined && profile.height !== null ? `${profile.height} cm` : 'Set height';
+  const age = profile && profile.age !== undefined && profile.age !== null ? `${profile.age} years` : 'Set age';
+
+  useFocusEffect(
+    useCallback(() => {
+      loadFitnessProfile();
+    }, [token])
+  );
+
+  const loadFitnessProfile = useCallback(async () => {
+    if (!token) return;
+    
+    try {
+      setIsLoadingProfile(true);
+      const data = await userApi.getFitnessProfile(token);
+      console.log('📦 Profile response:', data);
+      if (data && data.profile) {
+        console.log('📦 Setting profile:', data.profile);
+        setProfile(data.profile);
+      } else {
+        console.log('📦 No profile data found');
+        setProfile({});
+      }
+    } catch (error: any) {
+      console.log('⚠️ Could not load fitness profile:', error.message);
+      // Don't show error to user, just use default values
+      setProfile({});
+    } finally {
+      setIsLoadingProfile(false);
+    }
+  }, [token]);
 
   return (
     <ThemedView style={styles.container}>
@@ -35,13 +70,25 @@ export default function MeTab() {
 
         <View style={styles.statsRow}>
           <LinearGradient colors={["#7c3aed", "#a855f7"]} style={styles.statCard}>
-            <ThemedText style={styles.statValue}>{weight}</ThemedText>
+            {isLoadingProfile ? (
+              <ActivityIndicator size="small" color="#fff" />
+            ) : (
+              <ThemedText style={styles.statValue}>{weight}</ThemedText>
+            )}
           </LinearGradient>
           <LinearGradient colors={["#7c3aed", "#a855f7"]} style={styles.statCard}>
-            <ThemedText style={styles.statValue}>{height}</ThemedText>
+            {isLoadingProfile ? (
+              <ActivityIndicator size="small" color="#fff" />
+            ) : (
+              <ThemedText style={styles.statValue}>{height}</ThemedText>
+            )}
           </LinearGradient>
           <LinearGradient colors={["#7c3aed", "#a855f7"]} style={styles.statCard}>
-            <ThemedText style={styles.statValue}>{age}</ThemedText>
+            {isLoadingProfile ? (
+              <ActivityIndicator size="small" color="#fff" />
+            ) : (
+              <ThemedText style={styles.statValue}>{age}</ThemedText>
+            )}
           </LinearGradient>
         </View>
 
@@ -52,8 +99,14 @@ export default function MeTab() {
         </TouchableOpacity>
 
         <View style={styles.card}>
-          <TouchableOpacity style={styles.cardRow} onPress={() => router.push('/account-info')}>
-            <ThemedText>Account</ThemedText>
+          <TouchableOpacity style={styles.cardRow} onPress={() => {
+            // Pass current profile data to account-info screen
+            router.push({
+              pathname: '/account-info',
+              params: { profileData: JSON.stringify(profile || {}) }
+            });
+          }}>
+            <ThemedText>Account & Profile Settings</ThemedText>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cardRow} onPress={() => router.push('/my-workouts')}>
             <ThemedText>My workouts 🚀</ThemedText>

@@ -4,13 +4,13 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { AuthProvider } from '../context/AuthContext';
 import { WorkoutProvider } from '../context/WorkoutContext';
-import { Colors } from '@/constants/theme';
 
 export const unstable_settings = {
-  initialRouteName: 'welcome',
+  initialRouteName: 'index',
 };
 
 export default function RootLayout() {
@@ -22,6 +22,7 @@ export default function RootLayout() {
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
           <SafeAreaView style={{ flex: 1, backgroundColor: Colors[colorScheme ?? 'light'].background }}>
             <Stack>
+              <Stack.Screen name="index" options={{ headerShown: false }} />
               <Stack.Screen name="welcome" options={{ headerShown: false }} />
               <Stack.Screen name="auth" options={{ headerShown: false }} />
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

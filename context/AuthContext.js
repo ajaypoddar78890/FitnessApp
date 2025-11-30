@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { authApi } from '../api/authApi';
 import { storageService } from '../storage/storageService';
@@ -25,13 +26,24 @@ export const AuthProvider = ({ children }) => {
   const checkAuthState = async () => {
     try {
       setIsLoading(true);
+      console.log('🔍 Checking for persisted authentication...');
+      
       const savedToken = await storageService.getToken();
       const savedUser = await storageService.getUser();
+
+      console.log('💾 Stored auth data found:', {
+        hasToken: !!savedToken,
+        hasUser: !!savedUser,
+        userEmail: savedUser?.email || 'N/A'
+      });
 
       if (savedToken && savedUser) {
         setToken(savedToken);
         setUser(savedUser);
         setIsAuthenticated(true);
+        console.log('✅ Authentication restored from storage - user stays logged in');
+      } else {
+        console.log('❌ No valid authentication found - user needs to login');
       }
     } catch (error) {
       console.error('Error checking auth state:', error);
@@ -47,15 +59,23 @@ export const AuthProvider = ({ children }) => {
       
       // Handle both 'token' and 'accessToken' from backend
       const token = response.token || response.accessToken;
+      const refreshToken = response.refreshToken;
       
       if (token && response.user) {
         await storageService.saveToken(token);
         await storageService.saveUser(response.user);
         
+        // Save refresh token if available
+        if (refreshToken) {
+          await storageService.saveRefreshToken(refreshToken);
+          console.log('💾 Refresh token saved for persistence');
+        }
+        
         setToken(token);
         setUser(response.user);
         setIsAuthenticated(true);
         
+        console.log('💾 User credentials persisted - will stay logged in after app restart');
         return { success: true };
       } else {
         console.log('❌ Missing required fields in response:', {
@@ -83,15 +103,23 @@ export const AuthProvider = ({ children }) => {
       
       // Handle both 'token' and 'accessToken' from backend
       const token = response.token || response.accessToken;
+      const refreshToken = response.refreshToken;
       
       if (token && response.user) {
         await storageService.saveToken(token);
         await storageService.saveUser(response.user);
         
+        // Save refresh token if available
+        if (refreshToken) {
+          await storageService.saveRefreshToken(refreshToken);
+          console.log('💾 Refresh token saved during registration');
+        }
+        
         setToken(token);
         setUser(response.user);
         setIsAuthenticated(true);
         
+        console.log('💾 Registration successful - credentials persisted');
         return { success: true };
       } else {
         console.log('❌ Missing required fields in registration response:', {
@@ -114,17 +142,28 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
+      console.log('🚪 Starting logout process...');
+      
       if (token) {
+        console.log('📤 Calling logout API...');
         await authApi.logout(token);
+        console.log('✅ Logout API call successful');
+      } else {
+        console.log('⚠️ No token found, proceeding with local logout');
       }
     } catch (error) {
-      console.error('Logout API error:', error);
+      console.error('❌ Logout API error:', error);
       // Continue with local logout even if API call fails
     } finally {
+      console.log('🧹 Clearing local storage and state...');
       await storageService.clearAll();
       setToken(null);
       setUser(null);
       setIsAuthenticated(false);
+      
+      console.log('🔄 Redirecting to login page...');
+      router.replace('/auth/signin');
+      console.log('✅ Logout process completed');
     }
   };
 

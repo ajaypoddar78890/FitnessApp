@@ -1,16 +1,17 @@
+import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
 import React, { useRef, useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
   Dimensions,
   Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { LinearGradient } from 'expo-linear-gradient';
 import PagerView from 'react-native-pager-view';
-import { router } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { storageService } from '../storage/storageService';
 
 const { width, height } = Dimensions.get('window');
 
@@ -39,7 +40,9 @@ const WelcomeScreen = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const pagerRef = useRef<PagerView>(null);
 
-  const handleGetStarted = () => {
+  const handleGetStarted = async () => {
+    console.log('📚 Marking onboarding as completed');
+    await storageService.setOnboardingCompleted(true);
     router.replace('/auth/signin' as any);
   };
 

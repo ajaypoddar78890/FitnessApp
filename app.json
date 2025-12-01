@@ -9,9 +9,16 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yourcompany.myfitnessapp",
+      "infoPlist": {
+        "NSHealthShareUsageDescription": "We use Health data to show steps and activity statistics in the app.",
+        "NSHealthUpdateUsageDescription": "We may save workouts and activity summaries to Health if you allow it.",
+        "NSMotionUsageDescription": "Motion access is used to read step counts from the device."
+      }
     },
     "android": {
+      "package": "com.ajay.fitnessapp",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -20,7 +27,11 @@
       },
       "googleServicesFile": "./google-services.json",
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "ACTIVITY_RECOGNITION",
+        "BODY_SENSORS"
+      ]
     },
     "web": {
       "output": "static",

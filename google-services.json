@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "63218280614",
+    "project_id": "athpro-ai",
+    "storage_bucket": "athpro-ai.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:63218280614:android:5463188ca339c1fe58ac67",
+        "android_client_info": {
+          "package_name": "athpro.ai.ajay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "63218280614-13egnvr8v93ggokplmle72sdi07qgg23.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvIf87LUDuWk9980yg-krdzkDAAqW1bGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "63218280614-13egnvr8v93ggokplmle72sdi07qgg23.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,158 +1,169 @@
-import { API_BASE_URL } from '../constants/api';
+import { API_BASE_URL, API_ENDPOINTS } from '../constants/api';
 
-const WORKOUT_ENDPOINTS = {
-  WORKOUTS: '/workouts',
-  EXERCISES: '/exercises',
-  SESSIONS: '/sessions',
-};
-
+/**
+ * Workout API service functions
+ */
 export const workoutApi = {
-  getWorkouts: async (token) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}${WORKOUT_ENDPOINTS.WORKOUTS}`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch workouts');
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Get workouts error:', error);
-      throw error;
+  /**
+   * Get all workouts for the authenticated user
+   * @param {string} token - Authentication token
+   * @returns {Promise<{workouts: Array}>}
+   */
+  async getWorkouts(token) {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.WORKOUTS.LIST}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch workouts: ${response.statusText}`);
     }
+
+    return response.json();
   },
 
-  createWorkout: async (token, workoutData) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}${WORKOUT_ENDPOINTS.WORKOUTS}`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(workoutData),
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to create workout');
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Create workout error:', error);
-      throw error;
+  /**
+   * Get all exercises
+   * @param {string} token - Authentication token
+   * @returns {Promise<{exercises: Array}>}
+   */
+  async getExercises(token) {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.EXERCISES.LIST}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch exercises: ${response.statusText}`);
     }
+
+    return response.json();
   },
 
-  updateWorkout: async (token, workoutId, workoutData) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}${WORKOUT_ENDPOINTS.WORKOUTS}/${workoutId}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(workoutData),
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to update workout');
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Update workout error:', error);
-      throw error;
+  /**
+   * Create a new workout
+   * @param {string} token - Authentication token
+   * @param {Object} workoutData - Workout data
+   * @returns {Promise<{workout: Object}>}
+   */
+  async createWorkout(token, workoutData) {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.WORKOUTS.CREATE}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(workoutData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to create workout: ${response.statusText}`);
     }
+
+    return response.json();
   },
 
-  deleteWorkout: async (token, workoutId) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}${WORKOUT_ENDPOINTS.WORKOUTS}/${workoutId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      
-      return response.ok;
-    } catch (error) {
-      console.error('Delete workout error:', error);
-      throw error;
+  /**
+   * Update an existing workout
+   * @param {string} token - Authentication token
+   * @param {string} workoutId - Workout ID
+   * @param {Object} workoutData - Updated workout data
+   * @returns {Promise<{workout: Object}>}
+   */
+  async updateWorkout(token, workoutId, workoutData) {
+    const url = `${API_BASE_URL}${API_ENDPOINTS.WORKOUTS.UPDATE}`.replace(':id', workoutId);
+    
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(workoutData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to update workout: ${response.statusText}`);
     }
+
+    return response.json();
   },
 
-  getExercises: async (token) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}${WORKOUT_ENDPOINTS.EXERCISES}`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch exercises');
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Get exercises error:', error);
-      throw error;
+  /**
+   * Delete a workout
+   * @param {string} token - Authentication token
+   * @param {string} workoutId - Workout ID
+   * @returns {Promise<boolean>}
+   */
+  async deleteWorkout(token, workoutId) {
+    const url = `${API_BASE_URL}${API_ENDPOINTS.WORKOUTS.DELETE}`.replace(':id', workoutId);
+    
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to delete workout: ${response.statusText}`);
     }
+
+    // Return true for successful deletion
+    return true;
   },
 
-  startWorkoutSession: async (token, workoutId) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}${WORKOUT_ENDPOINTS.SESSIONS}`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ workoutId, startTime: new Date().toISOString() }),
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to start workout session');
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Start workout session error:', error);
-      throw error;
+  /**
+   * Start a workout session
+   * @param {string} token - Authentication token
+   * @param {string} workoutId - Workout ID
+   * @returns {Promise<{session: Object}>}
+   */
+  async startWorkoutSession(token, workoutId) {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.WORKOUTS.SESSIONS}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ workoutId }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to start workout session: ${response.statusText}`);
     }
+
+    return response.json();
   },
 
-  endWorkoutSession: async (token, sessionId, sessionData) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}${WORKOUT_ENDPOINTS.SESSIONS}/${sessionId}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...sessionData,
-          endTime: new Date().toISOString(),
-        }),
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to end workout session');
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error('End workout session error:', error);
-      throw error;
+  /**
+   * End a workout session
+   * @param {string} token - Authentication token
+   * @param {string} sessionId - Session ID
+   * @param {Object} sessionData - Session completion data
+   * @returns {Promise<{session: Object}>}
+   */
+  async endWorkoutSession(token, sessionId, sessionData) {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.WORKOUTS.SESSIONS}/${sessionId}/end`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(sessionData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to end workout session: ${response.statusText}`);
     }
+
+    return response.json();
   },
 };

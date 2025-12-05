@@ -1,16 +1,16 @@
-import { userApi } from '@/api/userApi';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Colors } from '@/constants/theme';
-import { useAuth } from '@/context/AuthContext';
-import { useFocusEffect } from '@react-navigation/native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, Image, ScrollView, StyleSheet, Switch, TouchableOpacity, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import { userApi } from '../../api/userApi';
+import { ThemedText } from '../../components/themed-text';
+import { ThemedView } from '../../components/themed-view';
+import { Colors } from '../../constants/theme';
+import { useAuth } from '../../context/AuthContext';
 
 export default function MeTab() {
   const { user, logout, token } = useAuth();
+  const navigation = useNavigation();
   const [profile, setProfile] = useState<any>({});
   const [isLoadingProfile, setIsLoadingProfile] = useState(true);
   const [pinLock, setPinLock] = React.useState(true);
@@ -101,17 +101,16 @@ export default function MeTab() {
         <View style={styles.card}>
           <TouchableOpacity style={styles.cardRow} onPress={() => {
             // Pass current profile data to account-info screen
-            router.push({
-              pathname: '/account-info',
-              params: { profileData: JSON.stringify(profile || {}) }
+            navigation.navigate('AccountInfo' as never, { 
+              profileData: JSON.stringify(profile || {}) 
             });
           }}>
             <ThemedText>Account & Profile Settings</ThemedText>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.cardRow} onPress={() => router.push('/my-workouts')}>
+          <TouchableOpacity style={styles.cardRow} onPress={() => navigation.navigate('MyWorkouts' as never)}>
             <ThemedText>My workouts 🚀</ThemedText>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.cardRow} onPress={() => router.push('/workout-reminders')}>
+          <TouchableOpacity style={styles.cardRow} onPress={() => navigation.navigate('WorkoutReminders' as never)}>
             <ThemedText>Workout reminders</ThemedText>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cardRow} onPress={logout}><ThemedText>Log out</ThemedText></TouchableOpacity>

@@ -1,8 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, Text, ScrollView, Dimensions } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ThemedText } from '../../components/themed-text';
+import { ThemedView } from '../../components/themed-view';
 
 const { width } = Dimensions.get('window');
 const GAP = 12;

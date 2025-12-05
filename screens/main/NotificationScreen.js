@@ -1,17 +1,15 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  SafeAreaView,
-  TouchableOpacity,
-  FlatList,
-} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import {
+    FlatList,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native';
 
-const NotificationScreen = () => {
+const NotificationScreen = ({ navigation }) => {
   const notifications = [
     {
       id: '1',
@@ -44,12 +42,12 @@ const NotificationScreen = () => {
   ];
 
   const handleBackPress = () => {
-    router.back();
+    navigation.goBack();
   };
 
   const handleNotificationPress = (notification) => {
     // Navigate to workout details or handle notification action
-    router.push({
+    navigation.push({
       pathname: '/workout-details',
       params: {
         title: notification.title,

@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
 import {
-  View,
-  StyleSheet,
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  Dimensions,
-  FlatList,
+    Dimensions,
+    FlatList,
+    Image,
+    ScrollView,
+    StyleSheet,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ThemedText } from '@/components/themed-text';
-import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
-import { router, useLocalSearchParams } from 'expo-router';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { ThemedText } from '../../components/themed-text';
 
 const { width } = Dimensions.get('window');
 
@@ -110,8 +110,9 @@ const workoutData: WorkoutCard[] = [
 ];
 
 export default function WorkoutsTab() {
-  const params = useLocalSearchParams();
-  const { category } = params;
+  const navigation = useNavigation();
+  const route = useRoute();
+  const { category } = route.params || {};
   const [searchText, setSearchText] = useState('');
   const [filteredWorkouts, setFilteredWorkouts] = useState(
     category ? workoutData.filter(w => w.category === category) : workoutData
@@ -145,15 +146,12 @@ export default function WorkoutsTab() {
 
   const WorkoutCard = ({ item }: { item: WorkoutCard }) => {
     const handleCardPress = () => {
-      router.push({
-        pathname: '/workout-details',
-        params: {
-          id: item.id,
-          title: item.title,
-          level: item.level,
-          duration: item.duration,
-          category: item.category,
-        }
+      navigation.navigate('WorkoutDetails' as never, {
+        id: item.id,
+        title: item.title,
+        level: item.level,
+        duration: item.duration,
+        category: item.category,
       });
     };
 
@@ -170,7 +168,7 @@ export default function WorkoutsTab() {
             style={styles.cardGradient}
           />
           <TouchableOpacity style={styles.favoriteButton}>
-            <Ionicons name="heart-outline" size={20} color="#fff" />
+            <Icon name="heart-outline" size={20} color="#fff" />
           </TouchableOpacity>
         </View>
         <View style={styles.cardContent}>
@@ -218,7 +216,7 @@ export default function WorkoutsTab() {
         {/* Search Bar */}
         <View style={styles.searchContainer}>
           <View style={styles.searchBar}>
-            <Ionicons name="search" size={20} color="#8e8e93" style={styles.searchIcon} />
+            <Icon name="search" size={20} color="#8e8e93" style={styles.searchIcon} />
             <TextInput
               style={styles.searchInput}
               placeholder="Search something"

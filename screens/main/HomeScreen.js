@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  SafeAreaView,
-  TextInput,
-  TouchableOpacity,
-  FlatList,
-  Dimensions,
+    Dimensions,
+    FlatList,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
+import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const { width } = Dimensions.get('window');
 
@@ -113,7 +112,7 @@ const HomeScreen = ({ navigation }) => {
       <View style={styles.workoutImageContainer}>
         <Text style={styles.workoutEmoji}>{item.image}</Text>
         <TouchableOpacity style={styles.favoriteButton}>
-          <Ionicons name="heart-outline" size={20} color="#fff" />
+          <Icon name="heart-outline" size={20} color="#fff" />
         </TouchableOpacity>
       </View>
       <View style={styles.workoutInfo}>
@@ -140,7 +139,7 @@ const HomeScreen = ({ navigation }) => {
         <Text style={styles.exerciseDuration}>{item.duration}</Text>
       </View>
       <TouchableOpacity style={styles.exerciseInfoButton}>
-        <Ionicons name="information-circle-outline" size={24} color="#8e8e93" />
+        <Icon name="information-circle-outline" size={24} color="#8e8e93" />
       </TouchableOpacity>
     </TouchableOpacity>
   );
@@ -159,16 +158,16 @@ const HomeScreen = ({ navigation }) => {
           </View>
           <TouchableOpacity 
             style={styles.notificationButton}
-            onPress={() => router.push('/notifications')}
+            onPress={() => navigation.navigate('Notifications')}
           >
-            <Ionicons name="notifications-outline" size={24} color="#fff" />
+            <Icon name="notifications-outline" size={24} color="#fff" />
           </TouchableOpacity>
         </View>
 
         {/* Search Bar */}
         <View style={styles.searchContainer}>
           <View style={styles.searchBar}>
-            <Ionicons name="search" size={20} color="#9662F1" style={styles.searchIcon} />
+            <Icon name="search" size={20} color="#9662F1" style={styles.searchIcon} />
             <TextInput
               style={styles.searchInput}
               placeholder="Search something"
@@ -183,7 +182,7 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.sectionContainer}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Category</Text>
-            <TouchableOpacity onPress={() => router.push('/(tabs)/workouts')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Workouts')}>
               <Text style={styles.viewAllText}>View All</Text>
             </TouchableOpacity>
           </View>
@@ -228,7 +227,7 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.sectionContainer}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Popular Workouts</Text>
-            <TouchableOpacity onPress={() => router.push('/(tabs)/workouts')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Workouts')}>
               <Text style={styles.viewAllText}>View All</Text>
             </TouchableOpacity>
           </View>
@@ -247,7 +246,7 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.sectionContainer}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Exercises</Text>
-            <TouchableOpacity onPress={() => router.push('/(tabs)/workouts')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Workouts')}>
               <Text style={styles.viewAllText}>View All</Text>
             </TouchableOpacity>
           </View>

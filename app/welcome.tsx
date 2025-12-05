@@ -3,6 +3,7 @@ import React, { useRef, useState } from 'react';
 import {
   Dimensions,
   Image,
+  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -10,7 +11,6 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import PagerView from 'react-native-pager-view';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { storageService } from '../storage/storageService';
 
 const { width, height } = Dimensions.get('window');
@@ -129,7 +129,7 @@ const WelcomeScreen = () => {
   );
 
   return (
-    <SafeAreaView style={styles.container} edges={[]}>
+    <SafeAreaView style={styles.container}>
       <PagerView
         ref={pagerRef}
         style={styles.container}

@@ -1,6 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { View } from 'react-native';
 import { AuthProvider } from './context/AuthContext';
 import { WorkoutProvider } from './context/WorkoutContext';
 
@@ -18,7 +18,7 @@ export default function App() {
   console.log('MyFitnessApp starting...');
   
   return (
-    <SafeAreaProvider>
+    <View style={{ flex: 1 }}>
       <AuthProvider>
         <WorkoutProvider>
           <NavigationContainer>
@@ -36,6 +36,6 @@ export default function App() {
           </NavigationContainer>
         </WorkoutProvider>
       </AuthProvider>
-    </SafeAreaProvider>
+    </View>
   );
 }

@@ -1,7 +1,7 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import HomeScreen from '../../screens/main/HomeScreen';
-import { useNavigation } from '@react-navigation/native';
 
 export default function HomeTab() {
   const navigation = useNavigation();

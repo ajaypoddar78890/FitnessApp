@@ -38,7 +38,7 @@ export default function RootLayout() {
                 <Stack.Screen name="workout-details" component={WorkoutDetailsScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="exercise-details" component={ExerciseDetailsScreen} options={{ headerShown: false }} />
               </Stack.Navigator>
-              <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} backgroundColor="transparent" translucent />
+              <StatusBar barStyle="light-content" backgroundColor="#000000" translucent={false} />
             </NavigationContainer>
           </ThemeProvider>
         </WorkoutProvider>

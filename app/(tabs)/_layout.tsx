@@ -27,32 +27,32 @@ export default function TabLayout() {
         name="index"
         component={IndexScreen}
         options={{
-          title: 'Health',
-          tabBarIcon: ({ color }) => <Icon name="home" size={24} color={color} />,
+          title: 'Home',
+          tabBarIcon: ({ color }) => <Icon name="home" size={26} color={color} />,
         }}
       />
       <Tab.Screen
         name="workouts"
         component={WorkoutsScreen}
         options={{
-          title: 'Workouts',
-          tabBarIcon: ({ color }) => <Icon name="barbell" size={24} color={color} />,
+          title: 'Trainings',
+          tabBarIcon: ({ color }) => <Icon name="fitness" size={26} color={color} />,
         }}
       />
       <Tab.Screen
         name="me"
         component={MeScreen}
         options={{
-          title: 'Profile',
-          tabBarIcon: ({ color }) => <Icon name="person" size={24} color={color} />,
+          title: 'Activity',
+          tabBarIcon: ({ color }) => <Icon name="pulse" size={26} color={color} />,
         }}
       />
       <Tab.Screen
         name="devices"
         component={DevicesScreen}
         options={{
-          title: 'Devices',
-          tabBarIcon: ({ color }) => <Icon name="watch" size={24} color={color} />,
+          title: 'Profile',
+          tabBarIcon: ({ color }) => <Icon name="person" size={26} color={color} />,
         }}
       />
     </Tab.Navigator>

@@ -19,10 +19,10 @@ const HomeScreen = ({ navigation }) => {
   const [searchText, setSearchText] = useState('');
 
   const categories = [
-    { id: 1, name: 'Cardio', icon: '🔥', color: '#FFB800' },
-    { id: 2, name: 'Yoga', icon: '🧘‍♀️', color: '#00D4FF' },
-    { id: 3, name: 'Stretch', icon: '🏋️', color: '#FFB800' },
-    { id: 4, name: 'Gym', icon: '🏆', color: '#FFD700' },
+    { id: 1, name: 'Cardio', icon: 'flame-outline', color: '#FF6B6B' },
+    { id: 2, name: 'Yoga', icon: 'leaf-outline', color: '#4ECDC4' },
+    { id: 3, name: 'Stretch', icon: 'resize-outline', color: '#FFB347' },
+    { id: 4, name: 'Gym', icon: 'fitness-outline', color: '#FFD93D' },
   ];
 
   const popularWorkouts = [
@@ -31,14 +31,14 @@ const HomeScreen = ({ navigation }) => {
       title: 'Rapid Lower Body',
       level: 'Beginner',
       duration: '42 min',
-      image: '🏃‍♀️',
+      image: 'walk-outline',
     },
     {
       id: '2',
       title: 'Bodyweight Strength',
       level: 'Beginner',
       duration: '25 min',
-      image: '💪',
+      image: 'fitness-outline',
     },
   ];
 
@@ -47,25 +47,25 @@ const HomeScreen = ({ navigation }) => {
       id: '1',
       name: 'Front and Back Lunge',
       duration: '0:30',
-      icon: '🏃‍♀️',
+      icon: 'walk-outline',
     },
     {
       id: '2',
       name: 'Side Plank',
       duration: '0:30',
-      icon: '🤸‍♀️',
+      icon: 'remove-outline',
     },
     {
       id: '3',
       name: 'Arm circles',
       duration: '0:30',
-      icon: '🔄',
+      icon: 'refresh-outline',
     },
     {
       id: '4',
       name: 'Sumo Squat',
       duration: '0:30',
-      icon: '🏋️‍♀️',
+      icon: 'arrow-down-outline',
     },
   ];
 
@@ -98,7 +98,7 @@ const HomeScreen = ({ navigation }) => {
       onPress={() => handleCategoryPress(item)}
       activeOpacity={0.8}
     >
-      <Text style={styles.categoryIcon}>{item.icon}</Text>
+      <Icon name={item.icon} size={32} color={item.color} />
       <Text style={styles.categoryName}>{item.name}</Text>
     </TouchableOpacity>
   );
@@ -110,7 +110,7 @@ const HomeScreen = ({ navigation }) => {
       activeOpacity={0.8}
     >
       <View style={styles.workoutImageContainer}>
-        <Text style={styles.workoutEmoji}>{item.image}</Text>
+        <Icon name={item.image} size={48} color="#9662F1" />
         <TouchableOpacity style={styles.favoriteButton}>
           <Icon name="heart-outline" size={20} color="#fff" />
         </TouchableOpacity>
@@ -132,7 +132,7 @@ const HomeScreen = ({ navigation }) => {
       activeOpacity={0.8}
     >
       <View style={styles.exerciseIcon}>
-        <Text style={styles.exerciseEmoji}>{item.icon}</Text>
+        <Icon name={item.icon} size={28} color="#9662F1" />
       </View>
       <View style={styles.exerciseInfo}>
         <Text style={styles.exerciseName}>{item.name}</Text>
@@ -345,14 +345,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginRight: 15,
   },
-  categoryIcon: {
-    fontSize: 24,
-    marginBottom: 5,
-  },
   categoryName: {
     fontSize: 12,
     fontWeight: '600',
     color: '#ffffff',
+    marginTop: 8,
   },
   featuredSection: {
     paddingHorizontal: 20,
@@ -435,9 +432,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     position: 'relative',
   },
-  workoutEmoji: {
-    fontSize: 40,
-  },
   favoriteButton: {
     position: 'absolute',
     top: 8,
@@ -493,9 +487,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
-  },
-  exerciseEmoji: {
-    fontSize: 24,
   },
   exerciseInfo: {
     flex: 1,

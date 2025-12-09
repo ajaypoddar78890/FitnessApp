@@ -1,18 +1,17 @@
+import { useNavigation, useRoute } from '@react-navigation/native';
 import React from 'react';
 import {
-  View,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-  Dimensions,
-  FlatList,
+    Dimensions,
+    FlatList,
+    Image,
+    ScrollView,
+    StyleSheet,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ThemedText } from '@/components/themed-text';
-import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useLocalSearchParams, router } from 'expo-router';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { ThemedText } from '../components/themed-text';
 
 const { width } = Dimensions.get('window');
 
@@ -137,8 +136,9 @@ const getWorkoutData = (workoutId: string, title: string) => {
 };
 
 export default function WorkoutDetailsScreen() {
-  const params = useLocalSearchParams();
-  const { id, title, level, duration, category } = params;
+  const navigation = useNavigation();
+  const route = useRoute();
+  const { id, title, level, duration, category } = route.params || {};
   
   const workoutData = getWorkoutData(id as string, title as string);
 
@@ -158,12 +158,9 @@ export default function WorkoutDetailsScreen() {
   const renderExercise = ({ item, index }: { item: Exercise; index: number }) => {
     const handleExercisePress = () => {
       if (item.type !== 'rest') {
-        router.push({
-          pathname: '/exercise-details',
-          params: {
-            exerciseName: item.name,
-            fromWorkout: title,
-          },
+        navigation.navigate('exercise-details', {
+          exerciseName: item.name,
+          fromWorkout: title,
         });
       }
     };
@@ -177,7 +174,7 @@ export default function WorkoutDetailsScreen() {
         <View style={styles.exerciseImageContainer}>
           {item.type === 'rest' ? (
             <View style={styles.restIcon}>
-              <Ionicons name="pause-circle" size={24} color="#a855f7" />
+              <Icon name="pause-circle" size={24} color="#a855f7" />
             </View>
           ) : (
             <Image source={item.image} style={styles.exerciseImage} />
@@ -192,7 +189,7 @@ export default function WorkoutDetailsScreen() {
         </View>
         
         <TouchableOpacity style={styles.infoButton} onPress={handleExercisePress}>
-          <Ionicons name="information-circle-outline" size={20} color="#8e8e93" />
+          <Icon name="information-circle-outline" size={20} color="#8e8e93" />
         </TouchableOpacity>
       </TouchableOpacity>
     );
@@ -221,13 +218,13 @@ export default function WorkoutDetailsScreen() {
       <View style={styles.header}>
         <TouchableOpacity 
           style={styles.backButton}
-          onPress={() => router.back()}
+          onPress={() => navigation.goBack()}
         >
-          <Ionicons name="arrow-back" size={24} color="#fff" />
+          <Icon name="arrow-back" size={24} color="#fff" />
         </TouchableOpacity>
         
         <TouchableOpacity style={styles.favoriteButton}>
-          <Ionicons name="heart-outline" size={24} color="#fff" />
+          <Icon name="heart-outline" size={24} color="#fff" />
         </TouchableOpacity>
       </View>
 
@@ -252,15 +249,15 @@ export default function WorkoutDetailsScreen() {
           {/* Stats */}
           <View style={styles.statsContainer}>
             <View style={styles.statItem}>
-              <Ionicons name="time-outline" size={16} color="#fff" />
+              <Icon name="time-outline" size={16} color="#fff" />
               <ThemedText style={styles.statText}>{workoutData.duration}</ThemedText>
             </View>
             <View style={styles.statItem}>
-              <Ionicons name="flame-outline" size={16} color="#fff" />
+              <Icon name="flame-outline" size={16} color="#fff" />
               <ThemedText style={styles.statText}>{workoutData.calories}</ThemedText>
             </View>
             <View style={styles.statItem}>
-              <Ionicons name="bar-chart-outline" size={16} color="#fff" />
+              <Icon name="bar-chart-outline" size={16} color="#fff" />
               <ThemedText style={styles.statText}>{workoutData.level}</ThemedText>
             </View>
           </View>
@@ -293,7 +290,7 @@ export default function WorkoutDetailsScreen() {
               onPress={handleScheduleWorkout}
             >
               <ThemedText style={styles.actionButtonText}>Schedule workout</ThemedText>
-              <Ionicons name="chevron-forward" size={20} color="#fff" />
+              <Icon name="chevron-forward" size={20} color="#fff" />
             </TouchableOpacity>
             
             <TouchableOpacity 
@@ -301,7 +298,7 @@ export default function WorkoutDetailsScreen() {
               onPress={handlePickPlaylist}
             >
               <ThemedText style={styles.actionButtonText}>Pick a playlist</ThemedText>
-              <Ionicons name="chevron-forward" size={20} color="#fff" />
+              <Icon name="chevron-forward" size={20} color="#fff" />
             </TouchableOpacity>
           </View>
 

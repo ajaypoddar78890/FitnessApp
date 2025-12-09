@@ -1,43 +1,48 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
+import { DarkTheme, DefaultTheme, NavigationContainer, ThemeProvider } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { StatusBar } from 'react-native';
 import 'react-native-reanimated';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { AuthProvider } from '../context/AuthContext';
 import { WorkoutProvider } from '../context/WorkoutContext';
+import { useColorScheme } from '../hooks/use-color-scheme';
 
-export const unstable_settings = {
-  initialRouteName: 'index',
-};
+// Import your screens
+import TabLayout from './(tabs)/_layout';
+import AuthLayout from './auth/_layout';
+import ExerciseDetailsScreen from './exercise-details';
+import IndexScreen from './index';
+import WelcomeScreen from './welcome';
+import WorkoutDetailsScreen from './workout-details';
+
+const Stack = createStackNavigator();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <AuthProvider>
-      <WorkoutProvider>
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <SafeAreaView style={{ flex: 1, backgroundColor: Colors[colorScheme ?? 'light'].background }}>
-            <Stack>
-              <Stack.Screen name="index" options={{ headerShown: false }} />
-              <Stack.Screen name="welcome" options={{ headerShown: false }} />
-              <Stack.Screen name="auth" options={{ headerShown: false }} />
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="workout-details" options={{ headerShown: false }} />
-              <Stack.Screen name="exercise-details" options={{ headerShown: false }} />
-              <Stack.Screen name="account-info" options={{ headerShown: false }} />
-              <Stack.Screen name="my-workouts" options={{ headerShown: false }} />
-              <Stack.Screen name="workout-reminders" options={{ headerShown: false }} />
-              <Stack.Screen name="notifications" options={{ headerShown: false }} />
-              <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-            </Stack>
-            <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-          </SafeAreaView>
-        </ThemeProvider>
-      </WorkoutProvider>
-    </AuthProvider>
+    <SafeAreaProvider>
+      <AuthProvider>
+        <WorkoutProvider>
+          <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+            <NavigationContainer>
+              <Stack.Navigator
+                screenOptions={{
+                  headerShown: false,
+                }}>
+                <Stack.Screen name="index" component={IndexScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="welcome" component={WelcomeScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="auth" component={AuthLayout} options={{ headerShown: false }} />
+                <Stack.Screen name="tabs" component={TabLayout} options={{ headerShown: false }} />
+                <Stack.Screen name="workout-details" component={WorkoutDetailsScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="exercise-details" component={ExerciseDetailsScreen} options={{ headerShown: false }} />
+              </Stack.Navigator>
+              <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} backgroundColor="transparent" translucent />
+            </NavigationContainer>
+          </ThemeProvider>
+        </WorkoutProvider>
+      </AuthProvider>
+    </SafeAreaProvider>
   );
 }

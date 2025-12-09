@@ -1,8 +1,6 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import React from 'react';
-
-import { HapticTab } from '../../components/haptic-tab';
-import { IconSymbol } from '../../components/ui/icon-symbol';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../../constants/theme';
 import { useColorScheme } from '../../hooks/use-color-scheme';
 
@@ -12,58 +10,49 @@ import IndexScreen from './index';
 import MeScreen from './me';
 import WorkoutsScreen from './workouts';
 
-const Tab = createBottomTabNavigator();
+const Tab = createMaterialBottomTabNavigator();
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
   return (
     <Tab.Navigator
-      initialRouteName="Devices"
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tabIconSelected,
-        tabBarInactiveTintColor: Colors[colorScheme ?? 'light'].tabIconDefault,
         headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarStyle: {
-          backgroundColor: Colors[colorScheme ?? 'light'].background,
-          borderTopWidth: 0,
-          height: 68,
-          paddingBottom: 10,
-          paddingTop: 8,
-        },
-        tabBarShowLabel: true,
+      }}
+      barStyle={{
+        backgroundColor: Colors[colorScheme ?? 'light'].background,
       }}>
       <Tab.Screen
-        name="Health"
+        name="index"
         component={IndexScreen}
         options={{
           title: 'Health',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: ({ color }) => <Icon name="home" size={24} color={color} />,
         }}
       />
       <Tab.Screen
-        name="Workouts"
+        name="workouts"
         component={WorkoutsScreen}
         options={{
           title: 'Workouts',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="dumbbell.fill" color={color} />,
+          tabBarIcon: ({ color }) => <Icon name="barbell" size={24} color={color} />,
         }}
       />
       <Tab.Screen
-        name="Devices"
-        component={DevicesScreen}
-        options={{
-          title: 'Activity',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="target" color={color} />,
-        }}
-      />
-      <Tab.Screen
-        name="Me"
+        name="me"
         component={MeScreen}
         options={{
-          title: 'Me',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={color} />,
+          title: 'Profile',
+          tabBarIcon: ({ color }) => <Icon name="person" size={24} color={color} />,
+        }}
+      />
+      <Tab.Screen
+        name="devices"
+        component={DevicesScreen}
+        options={{
+          title: 'Devices',
+          tabBarIcon: ({ color }) => <Icon name="watch" size={24} color={color} />,
         }}
       />
     </Tab.Navigator>

@@ -3,13 +3,14 @@ import { API_BASE_URL, API_ENDPOINTS } from '../constants/api';
 
 /**
  * Authentication API service functions
+ * Matches NestJS backend endpoints
  */
 export const authApi = {
   /**
-   * Login user
+   * Login user with email/password
    * @param {string} email
    * @param {string} password
-   * @returns {Promise<{token: string, user: object}>}
+   * @returns {Promise<{accessToken: string, refreshToken: string, user: object}>}
    */
   async login(email, password) {
     console.log('🌐 Making login API request to:', `${API_BASE_URL}${API_ENDPOINTS.AUTH.LOGIN}`);
@@ -32,16 +33,40 @@ export const authApi = {
 
     const responseData = await response.json();
     console.log('📦 Login API success response:', responseData);
-    console.log('🔑 Response has token?', !!responseData.token);
+    console.log('🔑 Response has accessToken?', !!responseData.accessToken);
     console.log('👤 Response has user?', !!responseData.user);
     
     return responseData;
   },
 
   /**
+   * Login via Firebase SSO
+   * @param {string} idToken - Firebase ID token
+   * @returns {Promise<{accessToken: string, refreshToken: string, user: object}>}
+   */
+  async firebaseLogin(idToken) {
+    console.log('🔥 Making Firebase login API request');
+    
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.AUTH.FIREBASE_LOGIN}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ idToken }),
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.message || 'Firebase login failed');
+    }
+
+    return response.json();
+  },
+
+  /**
    * Register new user
-   * @param {object} userData - User registration data
-   * @returns {Promise<{token: string, user: object}>}
+   * @param {object} userData - { email, password, name, photo? }
+   * @returns {Promise<{accessToken: string, refreshToken: string, user: object}>}
    */
   async register(userData) {
     const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.AUTH.REGISTER}`, {
@@ -61,41 +86,67 @@ export const authApi = {
   },
 
   /**
-   * Logout user
-   * @param {string} token - Authentication token
-   */
-  async logout(token) {
-    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.AUTH.LOGOUT}`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Logout failed');
-    }
-
-    return true;
-  },
-
-  /**
-   * Refresh authentication token
+   * Refresh access token
    * @param {string} refreshToken - Refresh token
-   * @returns {Promise<{token: string}>}
+   * @returns {Promise<{accessToken: string}>}
    */
   async refreshToken(refreshToken) {
     const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.AUTH.REFRESH}`, {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${refreshToken}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ refreshToken }),
     });
 
     if (!response.ok) {
       throw new Error('Token refresh failed');
+    }
+
+    return response.json();
+  },
+
+  /**
+   * Get current user profile (requires JWT)
+   * @param {string} accessToken - Access token
+   * @returns {Promise<object>} User profile
+   */
+  async getProfile(accessToken) {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.AUTH.PROFILE}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.message || 'Failed to get profile');
+    }
+
+    return response.json();
+  },
+
+  /**
+   * Update user profile (requires JWT)
+   * @param {string} accessToken - Access token
+   * @param {object} profileData - { name?, photo? }
+   * @returns {Promise<object>} Updated profile
+   */
+  async updateProfile(accessToken, profileData) {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.AUTH.PROFILE}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(profileData),
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.message || 'Failed to update profile');
     }
 
     return response.json();

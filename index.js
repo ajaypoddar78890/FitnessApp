@@ -1,6 +1,6 @@
-import 'react-native-gesture-handler';
 import { AppRegistry } from 'react-native';
-import App from './App';
+import 'react-native-gesture-handler';
+import RootLayout from './app/_layout';
 
 // Register the main component for React Native CLI
-AppRegistry.registerComponent('MyFitnessApp', () => App);
+AppRegistry.registerComponent('MyFitnessApp', () => RootLayout);

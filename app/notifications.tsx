@@ -8,8 +8,8 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
 
 interface Notification {
   id: string;
@@ -52,7 +52,7 @@ const NotificationScreen = () => {
   ];
 
   const handleBackPress = () => {
-    router.back();
+    navigation.goBack();
   };
 
   const handleNotificationPress = (notification: Notification) => {
@@ -82,7 +82,7 @@ const NotificationScreen = () => {
         </View>
       </View>
       <TouchableOpacity style={styles.arrowButton}>
-        <Ionicons name="chevron-forward" size={20} color="#8e8e93" />
+        <Icon name="chevron-forward" size={20} color="#8e8e93" />
       </TouchableOpacity>
     </TouchableOpacity>
   );
@@ -91,7 +91,7 @@ const NotificationScreen = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
-          <Ionicons name="chevron-back" size={24} color="#fff" />
+          <Icon name="chevron-back" size={24} color="#fff" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Notifications</Text>
         <View style={styles.placeholder} />

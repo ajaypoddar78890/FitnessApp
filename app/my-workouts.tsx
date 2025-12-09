@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Image, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
-import { ThemedText } from '@/components/themed-text';
-import { useWorkout } from '@/context/WorkoutContext';
-import { Colors } from '@/constants/theme';
-import { router } from 'expo-router';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { ThemedText } from '../components/themed-text';
+import { useWorkout } from '../context/WorkoutContext';
+import { Colors } from '../constants/theme';
+import { useNavigation } from '@react-navigation/native';
 
 interface WorkoutType {
   id: string;
@@ -47,7 +47,7 @@ export default function MyWorkouts() {
     return groupArr;
   }, [workouts]);
 
-  const handleBack = () => router.back();
+  const handleBack = () => navigation.goBack();
 
   const renderSegment = (tabName: string) => (
     <TouchableOpacity
@@ -78,7 +78,7 @@ export default function MyWorkouts() {
       <View style={styles.checkIconWrapper}>
         {workout.completed && (
           <View style={styles.checkIcon}>
-            <Ionicons name="checkmark" size={16} color="#fff" />
+            <Icon name="checkmark" size={16} color="#fff" />
           </View>
         )}
       </View>
@@ -89,7 +89,7 @@ export default function MyWorkouts() {
     <SafeAreaView style={styles.container} edges={['top']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#fff" />
+          <Icon name="arrow-back" size={24} color="#fff" />
         </TouchableOpacity>
         <ThemedText type="title" style={styles.title}>My workouts</ThemedText>
         <View style={{ width: 32 }} />
@@ -104,7 +104,7 @@ export default function MyWorkouts() {
           <View>
             {formattedGroups.length === 0 ? (
               <View style={styles.emptyState}>
-                <Ionicons name="fitness-outline" size={48} color="#8e8e93" />
+                <Icon name="fitness-outline" size={48} color="#8e8e93" />
                 <ThemedText style={styles.emptyTitle}>No workouts yet</ThemedText>
                 <ThemedText style={styles.emptySubtitle}>Your completed workouts will appear here</ThemedText>
               </View>

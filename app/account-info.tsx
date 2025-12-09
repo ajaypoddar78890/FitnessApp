@@ -1,10 +1,10 @@
-import { userApi } from '@/api/userApi';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Colors } from '@/constants/theme';
-import { useAuth } from '@/context/AuthContext';
-import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { userApi } from '../api/userApi';
+import { ThemedText } from '../components/themed-text';
+import { ThemedView } from '../components/themed-view';
+import { Colors } from '../constants/theme';
+import { useAuth } from '../context/AuthContext';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import {
   ActivityIndicator,
@@ -65,7 +65,7 @@ export default function AccountInfo() {
   }, [token]);
 
   const handleBack = () => {
-    router.back();
+    navigation.goBack();
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -119,7 +119,7 @@ export default function AccountInfo() {
       await userApi.updateFitnessProfile(token, profileData);
       
       Alert.alert('Success', 'Profile updated successfully!', [
-        { text: 'OK', onPress: () => router.back() }
+        { text: 'OK', onPress: () => navigation.goBack() }
       ]);
     } catch (error: any) {
       console.error('Profile update error:', error);
@@ -165,7 +165,7 @@ export default function AccountInfo() {
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color="#fff" />
+            <Icon name="arrow-back" size={24} color="#fff" />
           </TouchableOpacity>
           <ThemedText style={styles.headerTitle}>Fitness Profile</ThemedText>
           <View style={styles.placeholder} />

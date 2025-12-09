@@ -1,12 +1,12 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, StyleSheet, TouchableOpacity, Modal, TextInput, Platform } from 'react-native';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Ionicons } from '@expo/vector-icons';
+import { ThemedText } from '../components/themed-text';
+import { ThemedView } from '../components/themed-view';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
-import { Colors } from '@/constants/theme';
+import { useNavigation } from '@react-navigation/native';
+import { Colors } from '../constants/theme';
 
 export default function WorkoutReminders() {
   const [selectedDays, setSelectedDays] = React.useState<string[]>(['S']);
@@ -21,7 +21,7 @@ export default function WorkoutReminders() {
     setSelectedDays(prev => prev.includes(day) ? prev.filter(d => d !== day) : [...prev, day]);
   };
 
-  const handleBack = () => router.back();
+  const handleBack = () => navigation.goBack();
 
   const openTimeModal = (key: 'start' | 'end') => {
     setEditingTimeKey(key);
@@ -38,7 +38,7 @@ export default function WorkoutReminders() {
   const createReminder = () => {
     // Placeholder: Save reminder flow
     console.log('Creating reminder for days:', selectedDays, startTime, endTime);
-    router.back();
+    navigation.goBack();
   };
 
   return (
@@ -46,7 +46,7 @@ export default function WorkoutReminders() {
       <ThemedView style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={22} color={'#fff'} />
+            <Icon name="arrow-back" size={22} color={'#fff'} />
           </TouchableOpacity>
           <ThemedText type="title" style={styles.headerTitle}>Workout reminders</ThemedText>
           <View style={{ width: 28 }} />

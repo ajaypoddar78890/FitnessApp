@@ -17,27 +17,18 @@ export default function IndexScreen() {
         if (isAuthenticated && user) {
           console.log('🏠 User is authenticated - redirecting to main app');
           // User is logged in, go to main app
-          navigation.reset({
-            index: 0,
-            routes: [{ name: 'Tabs' }],
-          });
+          navigation.navigate('tabs' as any);
         } else {
           // Check if onboarding was completed for new users
           const onboardingCompleted = await storageService.isOnboardingCompleted();
           if (onboardingCompleted) {
             console.log('✅ Onboarding completed - redirecting to signin');
             // User has seen onboarding, go to signin
-            navigation.reset({
-              index: 0,
-              routes: [{ name: 'SignIn' }],
-            });
+            navigation.navigate('auth' as any);
           } else {
             console.log('👋 New user - showing welcome screens');
             // First time user, show welcome/onboarding
-            navigation.reset({
-              index: 0,
-              routes: [{ name: 'Welcome' }],
-            });
+            navigation.navigate('welcome' as any);
           }
         }
         setIsCheckingOnboarding(false);

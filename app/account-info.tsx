@@ -11,9 +11,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Feather from 'react-native-vector-icons/Feather';
 import { authApi } from '../api/authApi';
-import { userApi } from '../api/userApi';
-import { ThemedText } from '../components/themed-text';
-import { ThemedView } from '../components/themed-view';
+import Toast from 'react-native-toast-message';
 import { Colors } from '../constants/theme';
 import { useAuth } from '../context/AuthContext';
 
@@ -116,7 +114,7 @@ export default function AccountInfo({ navigation, route }) {
         }
       });
 
-      await userApi.updateFitnessProfile(token, profileData);
+      await authApi.updateProfile(token, profileData);
       
       Alert.alert('Success', 'Profile updated successfully!', [
         { text: 'OK', onPress: () => navigation.goBack() }
@@ -172,18 +170,12 @@ export default function AccountInfo({ navigation, route }) {
         </View>
 
         {isFetching ? (
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
             <ActivityIndicator size="large" color="#a855f7" />
           </View>
         ) : (
           <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-            {/* User Info Section */}
-            <View style={styles.section}>
-              <ThemedText style={styles.sectionTitle}>Personal Information</ThemedText>
-              <ThemedText style={styles.userInfo}>Name: {user?.name || 'User'}</ThemedText>
-              <ThemedText style={styles.userInfo}>Email: {user?.email || 'N/A'}</ThemedText>
-            </View>
-
+           
             {/* Basic Stats */}
             <View style={styles.section}>
               <ThemedText style={styles.sectionTitle}>Basic Stats</ThemedText>
@@ -223,9 +215,7 @@ export default function AccountInfo({ navigation, route }) {
                   keyboardType="numeric"
                 />
               </View>
-            </View>
-
-            {/* Gender Selection */}
+              {/* Gender Selection */}
             {renderPickerField('Gender', profile.gender, [
               { label: 'Male', value: 'male' },
               { label: 'Female', value: 'female' },
@@ -248,6 +238,9 @@ export default function AccountInfo({ navigation, route }) {
               { label: 'Very Active', value: 'very_active' }
             ], (value) => handleInputChange('activityLevel', value))}
 
+            </View>
+
+            
             {/* Save Button */}
             <TouchableOpacity 
               style={[styles.saveButton, isLoading && styles.saveButtonDisabled]} 
@@ -281,8 +274,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#374151',
+    // borderBottomWidth: 1,
+    // borderBottomColor: '#374151',
   },
   backButton: {
     padding: 8,

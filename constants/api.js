@@ -199,6 +199,7 @@ export const API_ENDPOINTS = {
     REGISTER: '/auth/register',           // POST - Register new user
     LOGIN: '/auth/login',                  // POST - Login with email/password
     FIREBASE_LOGIN: '/auth/firebase-login', // POST - Login via Firebase SSO
+    LOGOUT: '/auth/logout',                // POST - Logout user
     REFRESH: '/auth/refresh',              // POST - Refresh access token
     PROFILE: '/auth/profile',              // GET/PUT - Get/Update current user profile
   },

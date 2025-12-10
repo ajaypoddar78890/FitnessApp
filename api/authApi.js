@@ -192,16 +192,15 @@ export const authApi = {
 
     return response.json();
   },
-};
 
-/**
- * Sign up a new user using the central API base URL and endpoints.
- * @param {string} email
- * @param {string} password
- * @param {string} name
- * @returns {Promise<object>} response data
- */
-export async function signUp(email, password, name) {
+  /**
+   * Sign up new user
+   * @param {string} email
+   * @param {string} password
+   * @param {string} name
+   * @returns {Promise<object>} response data
+   */
+  async signUp(email, password, name) {
   const url = `${getApiBaseUrl()}${API_ENDPOINTS.AUTH.REGISTER}`;
 
   try {
@@ -274,4 +273,66 @@ export async function signUp(email, password, name) {
     
     throw new Error(errMsg);
   }
-}
+},
+
+  /**
+   * Logout user
+   * @returns {Promise<void>}
+   */
+  async logout() {
+    try {
+      const baseUrl = getApiBaseUrl();
+      const token = await AsyncStorage.getItem('accessToken');
+
+      console.log('🚪 Making logout API request to:', `${baseUrl}${API_ENDPOINTS.AUTH.LOGOUT}`);
+
+      const response = await fetch(`${baseUrl}${API_ENDPOINTS.AUTH.LOGOUT}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token ? `Bearer ${token}` : ''
+        },
+        body: '{}' // Empty JSON body as required by the endpoint
+      });
+
+      if (response.ok) {
+        console.log('✅ Logout API success');
+      } else {
+        console.log('⚠️ Logout API returned non-OK status:', response.status);
+      }
+
+      // Clear stored tokens regardless of API response
+      await AsyncStorage.removeItem('accessToken');
+      await AsyncStorage.removeItem('refreshToken');
+      console.log('🧹 Cleared stored tokens');
+
+    } catch (error) {
+      console.log('❌ Logout API error:', error);
+      // Even if API call fails, clear local tokens
+      try {
+        await AsyncStorage.removeItem('accessToken');
+        await AsyncStorage.removeItem('refreshToken');
+        console.log('🧹 Cleared stored tokens despite API error');
+      } catch (storageError) {
+        console.log('❌ Failed to clear stored tokens:', storageError);
+      }
+      throw error;
+    }
+  },
+
+  /**
+   * Get authentication headers for API requests
+   * @returns {Promise<{Authorization?: string}>}
+   */
+  async getAuthHeaders() {
+    try {
+      const token = await AsyncStorage.getItem('accessToken');
+      if (token) {
+        return { Authorization: `Bearer ${token}` };
+      }
+    } catch (error) {
+      console.log('❌ Error getting auth token:', error);
+    }
+    return {};
+  }
+};

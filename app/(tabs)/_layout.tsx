@@ -41,7 +41,8 @@ export default function TabLayout() {
       />
       <Tab.Screen
         name="me"
-        component={MeScreen}
+        
+         component={DevicesScreen}
         options={{
           title: 'Activity',
           tabBarIcon: ({ color }) => <Feather name="bar-chart-2" size={26} color={color} />,
@@ -49,7 +50,7 @@ export default function TabLayout() {
       />
       <Tab.Screen
         name="devices"
-        component={DevicesScreen}
+         component={MeScreen}
         options={{
           title: 'Profile',
           tabBarIcon: ({ color }) => <Feather name="user" size={26} color={color} />,

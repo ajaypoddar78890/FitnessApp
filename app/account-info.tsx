@@ -1,22 +1,23 @@
 import React, { useState } from 'react';
 import {
-    ActivityIndicator,
-    Alert,
-    ScrollView,
-    StyleSheet,
-    TextInput,
-    TouchableOpacity,
-    View
+  ActivityIndicator,
+  Alert,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Feather from 'react-native-vector-icons/Feather';
+import { authApi } from '../api/authApi';
 import { userApi } from '../api/userApi';
 import { ThemedText } from '../components/themed-text';
 import { ThemedView } from '../components/themed-view';
 import { Colors } from '../constants/theme';
 import { useAuth } from '../context/AuthContext';
 
-export default function AccountInfo() {
+export default function AccountInfo({ navigation, route }) {
   const { user, token } = useAuth();
   const [profile, setProfile] = useState({
     age: '',
@@ -35,7 +36,7 @@ export default function AccountInfo() {
       if (!token) return;
       try {
         setIsFetching(true);
-        const data = await userApi.getFitnessProfile(token);
+        const data = await authApi.getProfile(token);
         if (data && data.profile) {
           const p = data.profile as {
             age?: number;

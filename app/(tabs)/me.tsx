@@ -2,6 +2,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, Image, ScrollView, StyleSheet, Switch, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import { authApi } from '../../api/authApi';
 import { userApi } from '../../api/userApi';
 import { ThemedText } from '../../components/themed-text';
 import { ThemedView } from '../../components/themed-view';
@@ -35,7 +36,7 @@ export default function MeTab() {
     
     try {
       setIsLoadingProfile(true);
-      const data = await userApi.getFitnessProfile(token);
+      const data = await authApi.getProfile(token);
       console.log('📦 Profile response:', data);
       if (data && data.profile) {
         console.log('📦 Setting profile:', data.profile);
@@ -101,7 +102,7 @@ export default function MeTab() {
         <View style={styles.card}>
           <TouchableOpacity style={styles.cardRow} onPress={() => {
             // Pass current profile data to account-info screen
-            navigation.navigate('AccountInfo' as never, { 
+            navigation.navigate('account-info', { 
               profileData: JSON.stringify(profile || {}) 
             });
           }}>

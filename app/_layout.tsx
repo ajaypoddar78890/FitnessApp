@@ -10,6 +10,7 @@ import { useColorScheme } from '../hooks/use-color-scheme';
 
 // Import your screens
 import TabLayout from './(tabs)/_layout';
+import AccountInfoScreen from './account-info';
 import AuthLayout from './auth/_layout';
 import ExerciseDetailsScreen from './exercise-details';
 import IndexScreen from './index';
@@ -36,6 +37,7 @@ export default function RootLayout() {
                 <Stack.Screen name="welcome" component={WelcomeScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="auth" component={AuthLayout} options={{ headerShown: false }} />
                 <Stack.Screen name="tabs" component={TabLayout} options={{ headerShown: false }} />
+                <Stack.Screen name="account-info" component={AccountInfoScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="workout-details" component={WorkoutDetailsScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="notifications" component={NotificationScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="exercise-details" component={ExerciseDetailsScreen} options={{ headerShown: false }} />

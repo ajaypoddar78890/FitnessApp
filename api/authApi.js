@@ -152,7 +152,12 @@ export const authApi = {
    */
   async getProfile(accessToken) {
     const baseUrl = getApiBaseUrl();
-    const response = await fetch(`${baseUrl}${API_ENDPOINTS.AUTH.PROFILE}`, {
+    const fullUrl = `${baseUrl}${API_ENDPOINTS.AUTH.PROFILE}`;
+    console.log('🔗 Full API URL (GET):', fullUrl);
+    console.log('📨 HTTP Method: GET');
+    console.log('🔑 Authorization: Bearer [TOKEN]');
+    
+    const response = await fetch(fullUrl, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -176,7 +181,13 @@ export const authApi = {
    */
   async updateProfile(accessToken, profileData) {
     const baseUrl = getApiBaseUrl();
-    const response = await fetch(`${baseUrl}${API_ENDPOINTS.AUTH.PROFILE}`, {
+    const fullUrl = `${baseUrl}${API_ENDPOINTS.AUTH.PROFILE}`;
+    console.log('🔗 Full API URL:', fullUrl);
+    console.log('📨 HTTP Method: PUT');
+    console.log('🔑 Authorization: Bearer [TOKEN]');
+    console.log('📦 Request Body:', JSON.stringify(profileData, null, 2));
+    
+    const response = await fetch(fullUrl, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -188,6 +199,37 @@ export const authApi = {
     if (!response.ok) {
       const data = await response.json();
       throw new Error(data.message || 'Failed to update profile');
+    }
+
+    return response.json();
+  },
+
+  /**
+   * Update user fitness profile (weight, fitness goals, etc.)
+   * @param {string} accessToken - Access token
+   * @param {object} fitnessData - { weight?, fitnessGoal?, height? }
+   * @returns {Promise<object>} Updated fitness profile
+   */
+  async updateFitnessProfile(accessToken, fitnessData) {
+    const baseUrl = getApiBaseUrl();
+    const fullUrl = `${baseUrl}${API_ENDPOINTS.AUTH.FITNESS_PROFILE}`;
+    console.log('🔗 Full API URL:', fullUrl);
+    console.log('📨 HTTP Method: PUT');
+    console.log('🔑 Authorization: Bearer [TOKEN]');
+    console.log('📦 Request Body:', JSON.stringify(fitnessData, null, 2));
+    
+    const response = await fetch(fullUrl, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(fitnessData),
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.message || 'Failed to update fitness profile');
     }
 
     return response.json();

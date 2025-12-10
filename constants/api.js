@@ -202,6 +202,7 @@ export const API_ENDPOINTS = {
     LOGOUT: '/auth/logout',                // POST - Logout user
     REFRESH: '/auth/refresh',              // POST - Refresh access token
     PROFILE: '/auth/profile',              // GET/PUT - Get/Update current user profile
+    FITNESS_PROFILE: '/auth/profile/fitness', // PUT - Update fitness profile data
   },
   
   // User Management Endpoints (/users)

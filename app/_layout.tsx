@@ -13,6 +13,7 @@ import TabLayout from './(tabs)/_layout';
 import AuthLayout from './auth/_layout';
 import ExerciseDetailsScreen from './exercise-details';
 import IndexScreen from './index';
+import NotificationScreen from './notifications';
 import WelcomeScreen from './welcome';
 import WorkoutDetailsScreen from './workout-details';
 
@@ -36,6 +37,7 @@ export default function RootLayout() {
                 <Stack.Screen name="auth" component={AuthLayout} options={{ headerShown: false }} />
                 <Stack.Screen name="tabs" component={TabLayout} options={{ headerShown: false }} />
                 <Stack.Screen name="workout-details" component={WorkoutDetailsScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="notifications" component={NotificationScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="exercise-details" component={ExerciseDetailsScreen} options={{ headerShown: false }} />
               </Stack.Navigator>
               <StatusBar barStyle="light-content" backgroundColor="#000000" translucent={false} />

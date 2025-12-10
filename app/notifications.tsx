@@ -1,12 +1,13 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import {
-    FlatList,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  FlatList,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 
@@ -50,18 +51,17 @@ const NotificationScreen = () => {
     },
   ];
 
+  const navigation = useNavigation();
+
   const handleBackPress = () => {
     navigation.goBack();
   };
 
   const handleNotificationPress = (notification: Notification) => {
     // Navigate to workout details or handle notification action
-    router.push({
-      pathname: '/workout-details',
-      params: {
-        title: notification.title,
-        time: notification.time,
-      }
+    navigation.navigate('workout-details' as never, {
+      title: notification.title,
+      time: notification.time,
     });
   };
 

@@ -32,6 +32,8 @@ yarn-error.*
 
 # local env files
 .env*.local
+# Local dev API override - optional file for development only
+constants/dev.local.js
 
 # typescript
 *.tsbuildinfo

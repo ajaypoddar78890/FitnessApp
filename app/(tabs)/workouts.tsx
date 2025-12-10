@@ -1,4 +1,5 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
+import type { NavigationProp } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import {
     Dimensions,
@@ -109,9 +110,20 @@ const workoutData: WorkoutCard[] = [
   },
 ];
 
+type RootStackParamList = {
+  index: undefined;
+  welcome: undefined;
+  auth: undefined;
+  tabs: undefined;
+  'workouts': { category?: string };
+  'workout-details': { id: string; title: string; level: string; duration: string; category?: string };
+  'exercise-details': { exerciseName: string; fromWorkout?: string };
+  notifications: undefined;
+};
+
 export default function WorkoutsTab() {
-  const navigation = useNavigation();
-  const route = useRoute();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const route = useRoute<RouteProp<RootStackParamList, 'workouts'>>();
   const { category } = route.params || {};
   const [searchText, setSearchText] = useState('');
   const [filteredWorkouts, setFilteredWorkouts] = useState(
@@ -146,7 +158,7 @@ export default function WorkoutsTab() {
 
   const WorkoutCard = ({ item }: { item: WorkoutCard }) => {
     const handleCardPress = () => {
-      navigation.navigate('WorkoutDetails' as never, {
+      navigation.navigate('workout-details', {
         id: item.id,
         title: item.title,
         level: item.level,

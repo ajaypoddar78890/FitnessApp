@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { API_BASE_URL, API_ENDPOINTS } from '../constants/api';
+import { API_ENDPOINTS, getApiBaseUrl } from '../constants/api';
 
 export default function ApiTestScreen() {
   const [testResult, setTestResult] = useState('');
@@ -10,7 +10,7 @@ export default function ApiTestScreen() {
     setIsLoading(true);
     setTestResult('Testing connection...');
 
-    const url = `${API_BASE_URL}${API_ENDPOINTS.AUTH.REGISTER}`;
+    const url = `${getApiBaseUrl()}${API_ENDPOINTS.AUTH.REGISTER}`;
     
     try {
       console.log('Test: Attempting to connect to:', url);

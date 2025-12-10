@@ -1,4 +1,4 @@
-import { API_BASE_URL, API_ENDPOINTS } from '../constants/api';
+import { API_ENDPOINTS, getApiBaseUrl } from '../constants/api';
 
 /**
  * User API service functions
@@ -11,7 +11,8 @@ export const userApi = {
    * @returns {Promise<object>} User details
    */
   async getMe(token) {
-    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.USERS.ME}`, {
+    const baseUrl = getApiBaseUrl();
+    const response = await fetch(`${baseUrl}${API_ENDPOINTS.USERS.ME}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,

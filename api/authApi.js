@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { API_BASE_URL, API_ENDPOINTS } from '../constants/api';
+import { API_ENDPOINTS, findWorkingApiUrl, getApiBaseUrl, setApiBaseUrl } from '../constants/api';
 
 /**
  * Authentication API service functions
@@ -13,30 +13,66 @@ export const authApi = {
    * @returns {Promise<{accessToken: string, refreshToken: string, user: object}>}
    */
   async login(email, password) {
-    console.log('🌐 Making login API request to:', `${API_BASE_URL}${API_ENDPOINTS.AUTH.LOGIN}`);
-    
-    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.AUTH.LOGIN}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    });
+    let baseUrl = getApiBaseUrl();
+    console.log('🌐 Making login API request to:', `${baseUrl}${API_ENDPOINTS.AUTH.LOGIN}`);
 
-    console.log('📡 Login API response status:', response.status);
+    const attemptLogin = async (url) => {
+      const res = await fetch(`${url}${API_ENDPOINTS.AUTH.LOGIN}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      return res;
+    };
 
-    if (!response.ok) {
-      const data = await response.json();
-      console.log('❌ Login API error response:', data);
-      throw new Error(data.message || 'Login failed');
+    try {
+      // If baseUrl is localhost or an emulator address, attempt auto-detection first
+      if (!baseUrl || baseUrl.includes('localhost') || baseUrl.includes('127.0.0.1') || baseUrl.includes('10.0.2.2')) {
+        const detected = await findWorkingApiUrl();
+        if (detected && detected !== baseUrl) {
+          setApiBaseUrl(detected);
+          baseUrl = detected;
+          console.log('Login: using detected base url before initial attempt:', baseUrl);
+        }
+      }
+
+      let response = await attemptLogin(baseUrl);
+      console.log('📡 Login API response status:', response.status);
+
+      if (!response.ok) {
+        const data = await response.json();
+        console.log('❌ Login API error response:', data);
+        throw new Error(data.message || 'Login failed');
+      }
+
+      const responseData = await response.json();
+      console.log('📦 Login API success response:', responseData);
+      console.log('🔑 Response has accessToken?', !!responseData.accessToken);
+      console.log('👤 Response has user?', !!responseData.user);
+      return responseData;
+    } catch (initialErr) {
+      console.warn('Login: initial request failed:', initialErr.message || initialErr);
+      // Try auto-detection and retry once
+      try {
+        const fallback = await findWorkingApiUrl();
+        if (fallback && fallback !== baseUrl) {
+          console.log('Login: found fallback API host:', fallback);
+          setApiBaseUrl(fallback);
+          baseUrl = fallback;
+          const retryResponse = await attemptLogin(baseUrl);
+          console.log('📡 Login API response status (retry):', retryResponse.status);
+          if (!retryResponse.ok) {
+            const data = await retryResponse.json();
+            console.log('❌ Login API error response (retry):', data);
+            throw new Error(data.message || 'Login failed (retry)');
+          }
+          return await retryResponse.json();
+        }
+      } catch (fallbackErr) {
+        console.warn('Login: fallback detection/retry failed:', fallbackErr.message || fallbackErr);
+      }
+      throw initialErr;
     }
-
-    const responseData = await response.json();
-    console.log('📦 Login API success response:', responseData);
-    console.log('🔑 Response has accessToken?', !!responseData.accessToken);
-    console.log('👤 Response has user?', !!responseData.user);
-    
-    return responseData;
   },
 
   /**
@@ -47,7 +83,8 @@ export const authApi = {
   async firebaseLogin(idToken) {
     console.log('🔥 Making Firebase login API request');
     
-    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.AUTH.FIREBASE_LOGIN}`, {
+    const baseUrl = getApiBaseUrl();
+    const response = await fetch(`${baseUrl}${API_ENDPOINTS.AUTH.FIREBASE_LOGIN}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -69,7 +106,8 @@ export const authApi = {
    * @returns {Promise<{accessToken: string, refreshToken: string, user: object}>}
    */
   async register(userData) {
-    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.AUTH.REGISTER}`, {
+    const baseUrl = getApiBaseUrl();
+    const response = await fetch(`${baseUrl}${API_ENDPOINTS.AUTH.REGISTER}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -91,7 +129,8 @@ export const authApi = {
    * @returns {Promise<{accessToken: string}>}
    */
   async refreshToken(refreshToken) {
-    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.AUTH.REFRESH}`, {
+    const baseUrl = getApiBaseUrl();
+    const response = await fetch(`${baseUrl}${API_ENDPOINTS.AUTH.REFRESH}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${refreshToken}`,
@@ -112,7 +151,8 @@ export const authApi = {
    * @returns {Promise<object>} User profile
    */
   async getProfile(accessToken) {
-    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.AUTH.PROFILE}`, {
+    const baseUrl = getApiBaseUrl();
+    const response = await fetch(`${baseUrl}${API_ENDPOINTS.AUTH.PROFILE}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -135,7 +175,8 @@ export const authApi = {
    * @returns {Promise<object>} Updated profile
    */
   async updateProfile(accessToken, profileData) {
-    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.AUTH.PROFILE}`, {
+    const baseUrl = getApiBaseUrl();
+    const response = await fetch(`${baseUrl}${API_ENDPOINTS.AUTH.PROFILE}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -161,7 +202,7 @@ export const authApi = {
  * @returns {Promise<object>} response data
  */
 export async function signUp(email, password, name) {
-  const url = `${API_BASE_URL}${API_ENDPOINTS.AUTH.REGISTER}`;
+  const url = `${getApiBaseUrl()}${API_ENDPOINTS.AUTH.REGISTER}`;
 
   try {
     console.log('SignUp: Making request to:', url);

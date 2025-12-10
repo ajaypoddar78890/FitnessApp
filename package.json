@@ -3,7 +3,9 @@
   "main": "index.js",
   "version": "1.0.0",
   "scripts": {
-    "start": "react-native start",
+    "start": "node scripts/start-with-ip.js",
+    "start:localhost": "react-native start",
+    "check-ip": "node scripts/check-ip.js",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "react-native run-android",
     "ios": "react-native run-ios",

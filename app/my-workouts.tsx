@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useMemo } from 'react';
 import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -19,6 +20,7 @@ interface WorkoutType {
 }
 
 export default function MyWorkouts() {
+  const navigation = useNavigation();
   const { workouts } = useWorkout();
   const [selectedTab, setSelectedTab] = React.useState('History');
 
@@ -60,7 +62,7 @@ export default function MyWorkouts() {
   );
 
   const renderWorkoutRow = (workout: WorkoutType) => (
-    <TouchableOpacity style={styles.workoutRow} key={workout.id} onPress={() => router.push({ pathname: '/workout-details', params: { id: workout.id, title: workout.name } })}>
+    <TouchableOpacity style={styles.workoutRow} key={workout.id} onPress={() => navigation.navigate('workout-details' as never, { id: workout.id, title: workout.name as never })}>
       <View style={styles.thumb}>
         {workout.image ? (
           <Image source={{ uri: workout.image }} style={styles.thumbImage} />

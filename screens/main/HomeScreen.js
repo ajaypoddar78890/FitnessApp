@@ -70,26 +70,23 @@ const HomeScreen = ({ navigation }) => {
   ];
 
   const handleCategoryPress = (category) => {
-    router.push({ pathname: '/(tabs)/workouts', params: { category: category.name } });
+    // Navigate to workouts tab and pass the category param
+    navigation.navigate('workouts', { category: category.name });
   };
 
   const handleWorkoutPress = (workout) => {
-    router.push({
-      pathname: '/workout-details',
-      params: {
-        id: workout.id,
-        title: workout.title,
-        level: workout.level,
-        duration: workout.duration,
-      }
+    // Navigate to workout details screen at root stack
+    navigation.navigate('workout-details', {
+      id: workout.id,
+      title: workout.title,
+      level: workout.level,
+      duration: workout.duration,
     });
   };
 
   const handleExercisePress = (exercise) => {
-    router.push({
-      pathname: '/exercise-details',
-      params: { exerciseName: exercise.name }
-    });
+    // Navigate to exercise details screen at root stack
+    navigation.navigate('exercise-details', { exerciseName: exercise.name });
   };
 
   const renderCategoryCard = ({ item }) => (
@@ -158,7 +155,7 @@ const HomeScreen = ({ navigation }) => {
           </View>
           <TouchableOpacity 
             style={styles.notificationButton}
-            onPress={() => navigation.navigate('Notifications')}
+            onPress={() => navigation.navigate('notifications')}
           >
             <Feather name="bell" size={24} color="#fff" />
           </TouchableOpacity>
@@ -182,7 +179,7 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.sectionContainer}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Category</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Workouts')}>
+            <TouchableOpacity onPress={() => navigation.navigate('workouts')}>
               <Text style={styles.viewAllText}>View All</Text>
             </TouchableOpacity>
           </View>
@@ -227,7 +224,7 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.sectionContainer}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Popular Workouts</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Workouts')}>
+            <TouchableOpacity onPress={() => navigation.navigate('workouts')}>
               <Text style={styles.viewAllText}>View All</Text>
             </TouchableOpacity>
           </View>
@@ -246,7 +243,7 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.sectionContainer}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Exercises</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Workouts')}>
+            <TouchableOpacity onPress={() => navigation.navigate('workouts')}>
               <Text style={styles.viewAllText}>View All</Text>
             </TouchableOpacity>
           </View>

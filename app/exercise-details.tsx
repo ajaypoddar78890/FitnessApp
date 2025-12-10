@@ -9,7 +9,7 @@ import {
     View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
 import { ThemedText } from '../components/themed-text';
 
 const { width } = Dimensions.get('window');
@@ -161,7 +161,7 @@ export default function ExerciseDetails() {
           
           {/* Back Button */}
           <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-            <Icon name="arrow-back" size={24} color="#fff" />
+            <Feather name="arrow-left" size={24} color="#fff" />
           </TouchableOpacity>
         </View>
 
@@ -172,11 +172,11 @@ export default function ExerciseDetails() {
             <ThemedText style={styles.exerciseTitle}>{exerciseData.name}</ThemedText>
             <View style={styles.metaInfo}>
               <View style={styles.metaItem}>
-                <Icon name="barbell" size={16} color="#a855f7" />
+                <Feather name="activity" size={16} color="#a855f7" />
                 <ThemedText style={styles.metaText}>{exerciseData.difficulty}</ThemedText>
               </View>
               <View style={styles.metaItem}>
-                <Icon name="time" size={16} color="#a855f7" />
+                <Feather name="clock" size={16} color="#a855f7" />
                 <ThemedText style={styles.metaText}>
                   {exerciseData.duration || exerciseData.reps}
                 </ThemedText>

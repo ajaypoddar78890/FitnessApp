@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
 import { ThemedText } from '../../components/themed-text';
 
 const { width } = Dimensions.get('window');
@@ -168,7 +168,7 @@ export default function WorkoutsTab() {
             style={styles.cardGradient}
           />
           <TouchableOpacity style={styles.favoriteButton}>
-            <Icon name="heart-outline" size={20} color="#fff" />
+            <Feather name="heart" size={20} color="#fff" />
           </TouchableOpacity>
         </View>
         <View style={styles.cardContent}>
@@ -216,7 +216,7 @@ export default function WorkoutsTab() {
         {/* Search Bar */}
         <View style={styles.searchContainer}>
           <View style={styles.searchBar}>
-            <Icon name="search" size={20} color="#8e8e93" style={styles.searchIcon} />
+            <Feather name="search" size={20} color="#8e8e93" style={styles.searchIcon} />
             <TextInput
               style={styles.searchInput}
               placeholder="Search something"

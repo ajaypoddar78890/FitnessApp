@@ -1,15 +1,14 @@
 import React from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  SafeAreaView,
-  TouchableOpacity,
-  FlatList,
+    FlatList,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
+import Feather from 'react-native-vector-icons/Feather';
 
 interface Notification {
   id: string;
@@ -82,7 +81,7 @@ const NotificationScreen = () => {
         </View>
       </View>
       <TouchableOpacity style={styles.arrowButton}>
-        <Icon name="chevron-forward" size={20} color="#8e8e93" />
+        <Feather name="chevron-right" size={20} color="#8e8e93" />
       </TouchableOpacity>
     </TouchableOpacity>
   );
@@ -91,7 +90,7 @@ const NotificationScreen = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
-          <Icon name="chevron-back" size={24} color="#fff" />
+          <Feather name="chevron-left" size={24} color="#fff" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Notifications</Text>
         <View style={styles.placeholder} />

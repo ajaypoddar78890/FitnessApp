@@ -1,21 +1,20 @@
+import React, { useState } from 'react';
+import {
+    ActivityIndicator,
+    Alert,
+    ScrollView,
+    StyleSheet,
+    TextInput,
+    TouchableOpacity,
+    View
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Feather from 'react-native-vector-icons/Feather';
 import { userApi } from '../api/userApi';
 import { ThemedText } from '../components/themed-text';
 import { ThemedView } from '../components/themed-view';
 import { Colors } from '../constants/theme';
 import { useAuth } from '../context/AuthContext';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
-import {
-  ActivityIndicator,
-  Alert,
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function AccountInfo() {
   const { user, token } = useAuth();
@@ -165,7 +164,7 @@ export default function AccountInfo() {
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-            <Icon name="arrow-back" size={24} color="#fff" />
+            <Feather name="arrow-left" size={24} color="#fff" />
           </TouchableOpacity>
           <ThemedText style={styles.headerTitle}>Fitness Profile</ThemedText>
           <View style={styles.placeholder} />

@@ -1,11 +1,10 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
+import { Modal, Platform, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, StyleSheet, TouchableOpacity, Modal, TextInput, Platform } from 'react-native';
+import Feather from 'react-native-vector-icons/Feather';
 import { ThemedText } from '../components/themed-text';
 import { ThemedView } from '../components/themed-view';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
 import { Colors } from '../constants/theme';
 
 export default function WorkoutReminders() {
@@ -45,8 +44,8 @@ export default function WorkoutReminders() {
     <SafeAreaView style={styles.safe} edges={['top']}>
       <ThemedView style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-            <Icon name="arrow-back" size={22} color={'#fff'} />
+            <TouchableOpacity onPress={handleBack} style={styles.backButton}>
+            <Feather name="arrow-left" size={22} color={'#fff'} />
           </TouchableOpacity>
           <ThemedText type="title" style={styles.headerTitle}>Workout reminders</ThemedText>
           <View style={{ width: 28 }} />

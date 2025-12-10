@@ -1,6 +1,6 @@
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import React from 'react';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
 import { Colors } from '../../constants/theme';
 import { useColorScheme } from '../../hooks/use-color-scheme';
 
@@ -28,7 +28,7 @@ export default function TabLayout() {
         component={IndexScreen}
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <Icon name="home" size={26} color={color} />,
+          tabBarIcon: ({ color }) => <Feather name="home" size={26} color={color} />,
         }}
       />
       <Tab.Screen
@@ -36,7 +36,7 @@ export default function TabLayout() {
         component={WorkoutsScreen}
         options={{
           title: 'Trainings',
-          tabBarIcon: ({ color }) => <Icon name="fitness" size={26} color={color} />,
+          tabBarIcon: ({ color }) => <Feather name="activity" size={26} color={color} />,
         }}
       />
       <Tab.Screen
@@ -44,7 +44,7 @@ export default function TabLayout() {
         component={MeScreen}
         options={{
           title: 'Activity',
-          tabBarIcon: ({ color }) => <Icon name="pulse" size={26} color={color} />,
+          tabBarIcon: ({ color }) => <Feather name="bar-chart-2" size={26} color={color} />,
         }}
       />
       <Tab.Screen
@@ -52,7 +52,7 @@ export default function TabLayout() {
         component={DevicesScreen}
         options={{
           title: 'Profile',
-          tabBarIcon: ({ color }) => <Icon name="person" size={26} color={color} />,
+          tabBarIcon: ({ color }) => <Feather name="user" size={26} color={color} />,
         }}
       />
     </Tab.Navigator>

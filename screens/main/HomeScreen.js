@@ -11,7 +11,7 @@ import {
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
 
 const { width } = Dimensions.get('window');
 
@@ -19,10 +19,10 @@ const HomeScreen = ({ navigation }) => {
   const [searchText, setSearchText] = useState('');
 
   const categories = [
-    { id: 1, name: 'Cardio', icon: 'flame-outline', color: '#FF6B6B' },
-    { id: 2, name: 'Yoga', icon: 'leaf-outline', color: '#4ECDC4' },
-    { id: 3, name: 'Stretch', icon: 'resize-outline', color: '#FFB347' },
-    { id: 4, name: 'Gym', icon: 'fitness-outline', color: '#FFD93D' },
+    { id: 1, name: 'Cardio', icon: 'activity', color: '#FF6B6B' },
+    { id: 2, name: 'Yoga', icon: 'sun', color: '#4ECDC4' },
+    { id: 3, name: 'Stretch', icon: 'refresh-ccw', color: '#FFB347' },
+    { id: 4, name: 'Gym', icon: 'activity', color: '#FFD93D' },
   ];
 
   const popularWorkouts = [
@@ -31,14 +31,14 @@ const HomeScreen = ({ navigation }) => {
       title: 'Rapid Lower Body',
       level: 'Beginner',
       duration: '42 min',
-      image: 'walk-outline',
+      image: 'activity',
     },
     {
       id: '2',
       title: 'Bodyweight Strength',
       level: 'Beginner',
       duration: '25 min',
-      image: 'fitness-outline',
+      image: 'activity',
     },
   ];
 
@@ -47,25 +47,25 @@ const HomeScreen = ({ navigation }) => {
       id: '1',
       name: 'Front and Back Lunge',
       duration: '0:30',
-      icon: 'walk-outline',
+      icon: 'activity',
     },
     {
       id: '2',
       name: 'Side Plank',
       duration: '0:30',
-      icon: 'remove-outline',
+      icon: 'minus-circle',
     },
     {
       id: '3',
       name: 'Arm circles',
       duration: '0:30',
-      icon: 'refresh-outline',
+      icon: 'refresh-ccw',
     },
     {
       id: '4',
       name: 'Sumo Squat',
       duration: '0:30',
-      icon: 'arrow-down-outline',
+      icon: 'arrow-down',
     },
   ];
 
@@ -98,7 +98,7 @@ const HomeScreen = ({ navigation }) => {
       onPress={() => handleCategoryPress(item)}
       activeOpacity={0.8}
     >
-      <Icon name={item.icon} size={32} color={item.color} />
+      <Feather name={item.icon} size={32} color={item.color} />
       <Text style={styles.categoryName}>{item.name}</Text>
     </TouchableOpacity>
   );
@@ -110,10 +110,10 @@ const HomeScreen = ({ navigation }) => {
       activeOpacity={0.8}
     >
       <View style={styles.workoutImageContainer}>
-        <Icon name={item.image} size={48} color="#9662F1" />
-        <TouchableOpacity style={styles.favoriteButton}>
-          <Icon name="heart-outline" size={20} color="#fff" />
-        </TouchableOpacity>
+        <Feather name={item.image} size={48} color="#9662F1" />
+          <TouchableOpacity style={styles.favoriteButton}>
+            <Feather name="heart" size={20} color="#fff" />
+          </TouchableOpacity>
       </View>
       <View style={styles.workoutInfo}>
         <Text style={styles.workoutTitle}>{item.title}</Text>
@@ -132,14 +132,14 @@ const HomeScreen = ({ navigation }) => {
       activeOpacity={0.8}
     >
       <View style={styles.exerciseIcon}>
-        <Icon name={item.icon} size={28} color="#9662F1" />
+        <Feather name={item.icon} size={28} color="#9662F1" />
       </View>
       <View style={styles.exerciseInfo}>
         <Text style={styles.exerciseName}>{item.name}</Text>
         <Text style={styles.exerciseDuration}>{item.duration}</Text>
       </View>
       <TouchableOpacity style={styles.exerciseInfoButton}>
-        <Icon name="information-circle-outline" size={24} color="#8e8e93" />
+        <Feather name="info" size={24} color="#8e8e93" />
       </TouchableOpacity>
     </TouchableOpacity>
   );
@@ -160,14 +160,14 @@ const HomeScreen = ({ navigation }) => {
             style={styles.notificationButton}
             onPress={() => navigation.navigate('Notifications')}
           >
-            <Icon name="notifications-outline" size={24} color="#fff" />
+            <Feather name="bell" size={24} color="#fff" />
           </TouchableOpacity>
         </View>
 
         {/* Search Bar */}
         <View style={styles.searchContainer}>
           <View style={styles.searchBar}>
-            <Icon name="search" size={20} color="#9662F1" style={styles.searchIcon} />
+            <Feather name="search" size={20} color="#9662F1" style={styles.searchIcon} />
             <TextInput
               style={styles.searchInput}
               placeholder="Search something"

@@ -10,7 +10,7 @@ import {
     View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
 import { ThemedText } from '../components/themed-text';
 
 const { width } = Dimensions.get('window');
@@ -39,7 +39,7 @@ const getWorkoutData = (workoutId: string, title: string) => {
       calories: '340 Kcal',
       level: 'Beginner',
       equipment: [
-        { name: '2 Dumbbells', icon: 'barbell-outline' },
+        { name: '2 Dumbbells', icon: 'activity' },
         { name: 'Mat', icon: 'fitness-outline' }
       ],
       sections: [
@@ -71,7 +71,7 @@ const getWorkoutData = (workoutId: string, title: string) => {
       calories: '450 Kcal',
       level: 'Beginner',
       equipment: [
-        { name: 'Dumbbells', icon: 'barbell-outline' },
+        { name: 'Dumbbells', icon: 'activity' },
         { name: 'Bench', icon: 'fitness-outline' }
       ],
       sections: [
@@ -104,7 +104,7 @@ const getWorkoutData = (workoutId: string, title: string) => {
       calories: '180 Kcal',
       level: 'Beginner',
       equipment: [
-        { name: 'Yoga Mat', icon: 'fitness-outline' },
+        { name: 'Yoga Mat', icon: 'activity' },
         { name: 'Block (Optional)', icon: 'square-outline' }
       ],
       sections: [
@@ -174,7 +174,7 @@ export default function WorkoutDetailsScreen() {
         <View style={styles.exerciseImageContainer}>
           {item.type === 'rest' ? (
             <View style={styles.restIcon}>
-              <Icon name="pause-circle" size={24} color="#a855f7" />
+              <Feather name="pause-circle" size={24} color="#a855f7" />
             </View>
           ) : (
             <Image source={item.image} style={styles.exerciseImage} />
@@ -189,7 +189,7 @@ export default function WorkoutDetailsScreen() {
         </View>
         
         <TouchableOpacity style={styles.infoButton} onPress={handleExercisePress}>
-          <Icon name="information-circle-outline" size={20} color="#8e8e93" />
+          <Feather name="info" size={20} color="#8e8e93" />
         </TouchableOpacity>
       </TouchableOpacity>
     );

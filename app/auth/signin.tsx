@@ -1,18 +1,18 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Alert,
+    KeyboardAvoidingView,
+    Platform,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
 import { useAuth } from '../../context/AuthContext';
 
 const SignInScreen = () => {
@@ -117,7 +117,7 @@ const SignInScreen = () => {
                   style={styles.eyeIcon}
                   onPress={() => setShowPassword(!showPassword)}
                 >
-                  <Icon
+                  <Feather
                     name={showPassword ? 'eye-off' : 'eye'}
                     size={20}
                     color="#6b7280"
@@ -151,21 +151,21 @@ const SignInScreen = () => {
                   style={styles.socialButton}
                   onPress={() => handleSocialSignIn('Apple')}
                 >
-                  <Icon name="logo-apple" size={24} color="#fff" />
+                  <Feather name="smartphone" size={24} color="#fff" />
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   style={styles.socialButton}
                   onPress={() => handleSocialSignIn('Facebook')}
                 >
-                  <Icon name="logo-facebook" size={24} color="#fff" />
+                  <Feather name="facebook" size={24} color="#fff" />
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   style={styles.socialButton}
                   onPress={() => handleSocialSignIn('Google')}
                 >
-                  <Icon name="logo-google" size={24} color="#fff" />
+                  <Feather name="mail" size={24} color="#fff" />
                 </TouchableOpacity>
               </View>
             </View>

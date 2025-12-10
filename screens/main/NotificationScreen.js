@@ -1,4 +1,3 @@
-import { Ionicons } from '@expo/vector-icons';
 import {
     FlatList,
     SafeAreaView,
@@ -8,6 +7,7 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import Feather from 'react-native-vector-icons/Feather';
 
 const NotificationScreen = ({ navigation }) => {
   const notifications = [
@@ -72,7 +72,7 @@ const NotificationScreen = ({ navigation }) => {
         </View>
       </View>
       <TouchableOpacity style={styles.arrowButton}>
-        <Ionicons name="chevron-forward" size={20} color="#8e8e93" />
+        <Feather name="chevron-right" size={20} color="#8e8e93" />
       </TouchableOpacity>
     </TouchableOpacity>
   );
@@ -81,7 +81,7 @@ const NotificationScreen = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
-          <Ionicons name="chevron-back" size={24} color="#fff" />
+          <Feather name="chevron-left" size={24} color="#fff" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Notifications</Text>
         <View style={styles.placeholder} />

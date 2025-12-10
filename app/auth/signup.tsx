@@ -12,7 +12,7 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
 import { signUp as apiSignUp } from '../../api/authApi';
 
 const SignUpScreen = () => {
@@ -139,7 +139,7 @@ const SignUpScreen = () => {
                   style={styles.eyeIcon}
                   onPress={() => setShowPassword(!showPassword)}
                 >
-                  <Icon
+                  <Feather
                     name={showPassword ? 'eye-off' : 'eye'}
                     size={20}
                     color="#6b7280"
@@ -154,7 +154,7 @@ const SignUpScreen = () => {
               >
                 <View style={[styles.checkbox, acceptedPrivacy && styles.checkboxChecked]}>
                   {acceptedPrivacy && (
-                    <Icon name="checkmark" size={16} color="#fff" />
+                    <Feather name="check" size={16} color="#fff" />
                   )}
                 </View>
                 <Text style={styles.privacyText}>
@@ -183,21 +183,21 @@ const SignUpScreen = () => {
                   style={styles.socialButton}
                   onPress={() => handleSocialSignIn('Apple')}
                 >
-                  <Icon name="logo-apple" size={24} color="#fff" />
+                  <Feather name="smartphone" size={24} color="#fff" />
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   style={styles.socialButton}
                   onPress={() => handleSocialSignIn('Facebook')}
                 >
-                  <Icon name="logo-facebook" size={24} color="#fff" />
+                  <Feather name="facebook" size={24} color="#fff" />
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   style={styles.socialButton}
                   onPress={() => handleSocialSignIn('Google')}
                 >
-                  <Icon name="logo-google" size={24} color="#fff" />
+                  <Feather name="mail" size={24} color="#fff" />
                 </TouchableOpacity>
               </View>
             </View>

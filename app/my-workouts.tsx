@@ -1,11 +1,10 @@
 import React, { useMemo } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Image, FlatList } from 'react-native';
+import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
 import { ThemedText } from '../components/themed-text';
-import { useWorkout } from '../context/WorkoutContext';
 import { Colors } from '../constants/theme';
-import { useNavigation } from '@react-navigation/native';
+import { useWorkout } from '../context/WorkoutContext';
 
 interface WorkoutType {
   id: string;
@@ -77,8 +76,8 @@ export default function MyWorkouts() {
 
       <View style={styles.checkIconWrapper}>
         {workout.completed && (
-          <View style={styles.checkIcon}>
-            <Icon name="checkmark" size={16} color="#fff" />
+            <View style={styles.checkIcon}>
+            <Feather name="check" size={16} color="#fff" />
           </View>
         )}
       </View>
@@ -89,7 +88,7 @@ export default function MyWorkouts() {
     <SafeAreaView style={styles.container} edges={['top']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-          <Icon name="arrow-back" size={24} color="#fff" />
+          <Feather name="arrow-left" size={24} color="#fff" />
         </TouchableOpacity>
         <ThemedText type="title" style={styles.title}>My workouts</ThemedText>
         <View style={{ width: 32 }} />
@@ -104,7 +103,7 @@ export default function MyWorkouts() {
           <View>
             {formattedGroups.length === 0 ? (
               <View style={styles.emptyState}>
-                <Icon name="fitness-outline" size={48} color="#8e8e93" />
+                <Feather name="activity" size={48} color="#8e8e93" />
                 <ThemedText style={styles.emptyTitle}>No workouts yet</ThemedText>
                 <ThemedText style={styles.emptySubtitle}>Your completed workouts will appear here</ThemedText>
               </View>

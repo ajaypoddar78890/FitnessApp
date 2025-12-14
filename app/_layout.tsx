@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'react-native';
 import 'react-native-reanimated';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
 
 import { AuthProvider } from '../context/AuthContext';
 import { WorkoutProvider } from '../context/WorkoutContext';
@@ -14,9 +15,11 @@ import AccountInfoScreen from './account-info';
 import AuthLayout from './auth/_layout';
 import ExerciseDetailsScreen from './exercise-details';
 import IndexScreen from './index';
+import MyWorkoutsScreen from './my-workouts';
 import NotificationScreen from './notifications';
 import WelcomeScreen from './welcome';
 import WorkoutDetailsScreen from './workout-details';
+import WorkoutRemindersScreen from './workout-reminders';
 
 const Stack = createStackNavigator();
 
@@ -41,7 +44,14 @@ export default function RootLayout() {
                 <Stack.Screen name="workout-details" component={WorkoutDetailsScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="notifications" component={NotificationScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="exercise-details" component={ExerciseDetailsScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="MyWorkouts" component={MyWorkoutsScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="WorkoutReminders" component={WorkoutRemindersScreen} options={{ headerShown: false }} />
               </Stack.Navigator>
+              <Toast 
+                ref={(ref) => Toast.setRef(ref)}
+                position="bottom"
+                bottomOffset={40}
+              />
               <StatusBar barStyle="light-content" backgroundColor="#000000" translucent={false} />
             </NavigationContainer>
           </ThemeProvider>

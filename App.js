@@ -12,7 +12,9 @@ import AuthLayout from './app/auth/_layout';
 import SignInScreen from './app/auth/signin';
 import SignUpScreen from './app/auth/signup';
 import IndexScreen from './app/index';
+import MyWorkoutsScreen from './app/my-workouts';
 import WelcomeScreen from './app/welcome';
+import WorkoutRemindersScreen from './app/workout-reminders';
 
 const Stack = createStackNavigator();
 
@@ -35,6 +37,8 @@ export default function App() {
                 <Stack.Screen name="SignIn" component={SignInScreen} />
                 <Stack.Screen name="SignUp" component={SignUpScreen} />
                 <Stack.Screen name="Tabs" component={TabsLayout} />
+                <Stack.Screen name="MyWorkouts" component={MyWorkoutsScreen} />
+                <Stack.Screen name="WorkoutReminders" component={WorkoutRemindersScreen} />
               </Stack.Navigator>
               <Toast 
                 ref={(ref) => Toast.setRef(ref)}

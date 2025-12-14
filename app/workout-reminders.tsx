@@ -1,4 +1,4 @@
-import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Modal, Platform, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,6 +8,7 @@ import { ThemedView } from '../components/themed-view';
 import { Colors } from '../constants/theme';
 
 export default function WorkoutReminders() {
+  const navigation = useNavigation();
   const [selectedDays, setSelectedDays] = React.useState<string[]>(['S']);
   const [startTime, setStartTime] = React.useState('07:00');
   const [endTime, setEndTime] = React.useState('08:00');
@@ -67,17 +68,17 @@ export default function WorkoutReminders() {
           <ThemedText style={styles.headingLarge}>Select the times you want to exercise</ThemedText>
 
           <TouchableOpacity style={styles.timeBar} activeOpacity={0.9} onPress={() => openTimeModal('start')}>
-            <LinearGradient colors={["#3a2d4c", "#2d2f39"]} style={styles.timeBarInner}>
+            <View style={styles.timeBarInner}>
               <ThemedText style={styles.timeLabel}>{startTime} - {endTime}</ThemedText>
-            </LinearGradient>
+            </View>
           </TouchableOpacity>
 
           <View style={{ flex: 1 }} />
 
           <TouchableOpacity onPress={createReminder} activeOpacity={0.9} style={styles.actionButtonWrapper}>
-            <LinearGradient colors={["#7c3aed", "#a855f7"]} style={styles.actionButton}>
+            <View style={styles.actionButton}>
               <ThemedText style={styles.actionText}>Create a reminder</ThemedText>
-            </LinearGradient>
+            </View>
           </TouchableOpacity>
         </View>
 
@@ -128,11 +129,11 @@ const styles = StyleSheet.create({
   dayTextSelected: { color: '#fff' },
 
   timeBar: { height: 36, borderRadius: 10, overflow: 'hidden', marginHorizontal: 0 },
-  timeBarInner: { paddingVertical: 8, alignItems: 'center' },
+  timeBarInner: { paddingVertical: 8, alignItems: 'center', backgroundColor: '#3a2d4c' },
   timeLabel: { color: '#d9d9df', fontWeight: '600' },
 
   actionButtonWrapper: { marginBottom: 28, paddingHorizontal: 16 },
-  actionButton: { paddingVertical: 14, borderRadius: 30, alignItems: 'center' },
+  actionButton: { paddingVertical: 14, borderRadius: 30, alignItems: 'center', backgroundColor: '#7c3aed' },
   actionText: { color: '#fff', fontWeight: '700' },
 
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' },

@@ -2,6 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
 import { AuthProvider } from './context/AuthContext';
 import { WorkoutProvider } from './context/WorkoutContext';
 
@@ -20,10 +21,10 @@ export default function App() {
   
   return (
     <SafeAreaProvider>
-      <View style={{ flex: 1 }}>
-        <AuthProvider>
-          <WorkoutProvider>
-            <NavigationContainer>
+      <AuthProvider>
+        <WorkoutProvider>
+          <NavigationContainer>
+            <View style={{ flex: 1 }}>
               <Stack.Navigator
                 initialRouteName="Index"
                 screenOptions={{ headerShown: false }}
@@ -35,10 +36,15 @@ export default function App() {
                 <Stack.Screen name="SignUp" component={SignUpScreen} />
                 <Stack.Screen name="Tabs" component={TabsLayout} />
               </Stack.Navigator>
-            </NavigationContainer>
-          </WorkoutProvider>
-        </AuthProvider>
-      </View>
+              <Toast 
+                ref={(ref) => Toast.setRef(ref)}
+                position="bottom"
+                bottomOffset={40}
+              />
+            </View>
+          </NavigationContainer>
+        </WorkoutProvider>
+      </AuthProvider>
     </SafeAreaProvider>
   );
 }

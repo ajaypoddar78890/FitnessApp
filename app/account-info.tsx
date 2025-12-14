@@ -11,6 +11,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Feather from 'react-native-vector-icons/Feather';
 import { authApi } from '../api/authApi';
+import { CustomToast } from '../components/CustomToast';
 import { ThemedText } from '../components/themed-text';
 import { ThemedView } from '../components/themed-view';
 import { Colors } from '../constants/theme';
@@ -136,6 +137,9 @@ export default function AccountInfo({ navigation, route }) {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
+  const [showCustomToast, setShowCustomToast] = useState(false);
+  const [customToastMessage, setCustomToastMessage] = useState('');
+  const [customToastType, setCustomToastType] = useState('success');
 
   // Fetch profile from API on mount
   React.useEffect(() => {
@@ -216,7 +220,7 @@ export default function AccountInfo({ navigation, route }) {
       const generalData: any = {};
 
       // Define which fields are fitness-related
-      const fitnessFields = ['weight', 'height', 'fitnessGoal', 'activityLevel'];
+      const fitnessFields = ['weight', 'height', 'age', 'fitnessGoal', 'activityLevel'];
 
       Object.keys(profile).forEach(key => {
         const value = profile[key];
@@ -224,7 +228,7 @@ export default function AccountInfo({ navigation, route }) {
 
         if (fitnessFields.includes(key)) {
           // Convert numeric fields
-          if (key === 'weight' || key === 'height') {
+          if (key === 'weight' || key === 'height' || key === 'age') {
             fitnessData[key] = Number(value);
           } else {
             fitnessData[key] = value;
@@ -253,12 +257,22 @@ export default function AccountInfo({ navigation, route }) {
         await authApi.updateProfile(token, generalData);
       }
 
-      Alert.alert('Success', 'Profile updated successfully!', [
-        { text: 'OK', onPress: () => navigation.goBack() }
-      ]);
+      console.log('🍞 Attempting to show success toast with custom implementation...');
+      setCustomToastMessage('Profile updated successfully! 🎉');
+      setShowCustomToast(true);
+      console.log('🍞 Custom success toast displayed');
+
+      // Navigate back after toast is visible (reduced from 4000ms to 2000ms)
+      setTimeout(() => {
+        navigation.goBack();
+      }, 1500);
+
+      
     } catch (error: any) {
       console.error('Profile update error:', error);
-      Alert.alert('Error', error.message || 'Failed to update profile. Please try again.');
+      setCustomToastMessage(`Error: ${error.message || 'Failed to update profile'}`);
+      setCustomToastType('error');
+      setShowCustomToast(true);
     } finally {
       setIsLoading(false);
     }
@@ -300,7 +314,7 @@ export default function AccountInfo({ navigation, route }) {
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-            <Feather name="arrow-left" size={24} color="#fff" />
+            <Feather name="arrow-left" size={24} color={Colors[theme].text} />
           </TouchableOpacity>
           <ThemedText style={styles.headerTitle}>Fitness Profile</ThemedText>
           <View style={styles.placeholder} />
@@ -393,7 +407,6 @@ export default function AccountInfo({ navigation, route }) {
               </ThemedText>
             </View>
 
-            
             {/* Save Button */}
             <TouchableOpacity 
               style={[styles.saveButton, isLoading && styles.saveButtonDisabled]} 
@@ -408,6 +421,14 @@ export default function AccountInfo({ navigation, route }) {
             </TouchableOpacity>
           </ScrollView>
         )}
+
+        {/* Custom Toast Component */}
+        <CustomToast
+          visible={showCustomToast}
+          message={customToastMessage}
+          type={customToastType}
+          onHide={() => setShowCustomToast(false)}
+        />
       </SafeAreaView>
     </ThemedView>
   );

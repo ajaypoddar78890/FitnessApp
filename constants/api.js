@@ -9,7 +9,7 @@ const getBaseUrl = () => {
   if (Platform.OS === 'android') {
     // For Android, we'll use auto-detection from Metro bundler
     // This will automatically get your computer's current IP
-    return 'http://localhost:4000'; // Fallback, will be auto-detected
+    return 'https://bq89jfsr-4000.inc1.devtunnels.ms'; // Fallback, will be auto-detected
   } else {
     return 'http://localhost:4000'; // iOS simulator
   }

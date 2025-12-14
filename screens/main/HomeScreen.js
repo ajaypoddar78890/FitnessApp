@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
+  Dimensions,
+  FlatList,
   SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
   TextInput,
   TouchableOpacity,
-  FlatList,
-  Dimensions,
+  View,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
+import LinearGradient from 'react-native-linear-gradient';
+import Feather from 'react-native-vector-icons/Feather';
 
 const { width } = Dimensions.get('window');
 
@@ -20,10 +19,10 @@ const HomeScreen = ({ navigation }) => {
   const [searchText, setSearchText] = useState('');
 
   const categories = [
-    { id: 1, name: 'Cardio', icon: '🔥', color: '#FFB800' },
-    { id: 2, name: 'Yoga', icon: '🧘‍♀️', color: '#00D4FF' },
-    { id: 3, name: 'Stretch', icon: '🏋️', color: '#FFB800' },
-    { id: 4, name: 'Gym', icon: '🏆', color: '#FFD700' },
+    { id: 1, name: 'Cardio', icon: 'activity', color: '#FF6B6B' },
+    { id: 2, name: 'Yoga', icon: 'sun', color: '#4ECDC4' },
+    { id: 3, name: 'Stretch', icon: 'refresh-ccw', color: '#FFB347' },
+    { id: 4, name: 'Gym', icon: 'activity', color: '#FFD93D' },
   ];
 
   const popularWorkouts = [
@@ -32,14 +31,14 @@ const HomeScreen = ({ navigation }) => {
       title: 'Rapid Lower Body',
       level: 'Beginner',
       duration: '42 min',
-      image: '🏃‍♀️',
+      image: 'activity',
     },
     {
       id: '2',
       title: 'Bodyweight Strength',
       level: 'Beginner',
       duration: '25 min',
-      image: '💪',
+      image: 'activity',
     },
   ];
 
@@ -48,49 +47,46 @@ const HomeScreen = ({ navigation }) => {
       id: '1',
       name: 'Front and Back Lunge',
       duration: '0:30',
-      icon: '🏃‍♀️',
+      icon: 'activity',
     },
     {
       id: '2',
       name: 'Side Plank',
       duration: '0:30',
-      icon: '🤸‍♀️',
+      icon: 'minus-circle',
     },
     {
       id: '3',
       name: 'Arm circles',
       duration: '0:30',
-      icon: '🔄',
+      icon: 'refresh-ccw',
     },
     {
       id: '4',
       name: 'Sumo Squat',
       duration: '0:30',
-      icon: '🏋️‍♀️',
+      icon: 'arrow-down',
     },
   ];
 
   const handleCategoryPress = (category) => {
-    router.push({ pathname: '/(tabs)/workouts', params: { category: category.name } });
+    // Navigate to workouts tab and pass the category param
+    navigation.navigate('workouts', { category: category.name });
   };
 
   const handleWorkoutPress = (workout) => {
-    router.push({
-      pathname: '/workout-details',
-      params: {
-        id: workout.id,
-        title: workout.title,
-        level: workout.level,
-        duration: workout.duration,
-      }
+    // Navigate to workout details screen at root stack
+    navigation.navigate('workout-details', {
+      id: workout.id,
+      title: workout.title,
+      level: workout.level,
+      duration: workout.duration,
     });
   };
 
   const handleExercisePress = (exercise) => {
-    router.push({
-      pathname: '/exercise-details',
-      params: { exerciseName: exercise.name }
-    });
+    // Navigate to exercise details screen at root stack
+    navigation.navigate('exercise-details', { exerciseName: exercise.name });
   };
 
   const renderCategoryCard = ({ item }) => (
@@ -99,7 +95,7 @@ const HomeScreen = ({ navigation }) => {
       onPress={() => handleCategoryPress(item)}
       activeOpacity={0.8}
     >
-      <Text style={styles.categoryIcon}>{item.icon}</Text>
+      <Feather name={item.icon} size={32} color={item.color} />
       <Text style={styles.categoryName}>{item.name}</Text>
     </TouchableOpacity>
   );
@@ -111,10 +107,10 @@ const HomeScreen = ({ navigation }) => {
       activeOpacity={0.8}
     >
       <View style={styles.workoutImageContainer}>
-        <Text style={styles.workoutEmoji}>{item.image}</Text>
-        <TouchableOpacity style={styles.favoriteButton}>
-          <Ionicons name="heart-outline" size={20} color="#fff" />
-        </TouchableOpacity>
+        <Feather name={item.image} size={48} color="#9662F1" />
+          <TouchableOpacity style={styles.favoriteButton}>
+            <Feather name="heart" size={20} color="#fff" />
+          </TouchableOpacity>
       </View>
       <View style={styles.workoutInfo}>
         <Text style={styles.workoutTitle}>{item.title}</Text>
@@ -133,14 +129,14 @@ const HomeScreen = ({ navigation }) => {
       activeOpacity={0.8}
     >
       <View style={styles.exerciseIcon}>
-        <Text style={styles.exerciseEmoji}>{item.icon}</Text>
+        <Feather name={item.icon} size={28} color="#9662F1" />
       </View>
       <View style={styles.exerciseInfo}>
         <Text style={styles.exerciseName}>{item.name}</Text>
         <Text style={styles.exerciseDuration}>{item.duration}</Text>
       </View>
       <TouchableOpacity style={styles.exerciseInfoButton}>
-        <Ionicons name="information-circle-outline" size={24} color="#8e8e93" />
+        <Feather name="info" size={24} color="#8e8e93" />
       </TouchableOpacity>
     </TouchableOpacity>
   );
@@ -159,16 +155,16 @@ const HomeScreen = ({ navigation }) => {
           </View>
           <TouchableOpacity 
             style={styles.notificationButton}
-            onPress={() => router.push('/notifications')}
+            onPress={() => navigation.navigate('notifications')}
           >
-            <Ionicons name="notifications-outline" size={24} color="#fff" />
+            <Feather name="bell" size={24} color="#fff" />
           </TouchableOpacity>
         </View>
 
         {/* Search Bar */}
         <View style={styles.searchContainer}>
           <View style={styles.searchBar}>
-            <Ionicons name="search" size={20} color="#9662F1" style={styles.searchIcon} />
+            <Feather name="search" size={20} color="#9662F1" style={styles.searchIcon} />
             <TextInput
               style={styles.searchInput}
               placeholder="Search something"
@@ -183,7 +179,7 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.sectionContainer}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Category</Text>
-            <TouchableOpacity onPress={() => router.push('/(tabs)/workouts')}>
+            <TouchableOpacity onPress={() => navigation.navigate('workouts')}>
               <Text style={styles.viewAllText}>View All</Text>
             </TouchableOpacity>
           </View>
@@ -228,7 +224,7 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.sectionContainer}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Popular Workouts</Text>
-            <TouchableOpacity onPress={() => router.push('/(tabs)/workouts')}>
+            <TouchableOpacity onPress={() => navigation.navigate('workouts')}>
               <Text style={styles.viewAllText}>View All</Text>
             </TouchableOpacity>
           </View>
@@ -247,7 +243,7 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.sectionContainer}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Exercises</Text>
-            <TouchableOpacity onPress={() => router.push('/(tabs)/workouts')}>
+            <TouchableOpacity onPress={() => navigation.navigate('workouts')}>
               <Text style={styles.viewAllText}>View All</Text>
             </TouchableOpacity>
           </View>
@@ -346,14 +342,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginRight: 15,
   },
-  categoryIcon: {
-    fontSize: 24,
-    marginBottom: 5,
-  },
   categoryName: {
     fontSize: 12,
     fontWeight: '600',
     color: '#ffffff',
+    marginTop: 8,
   },
   featuredSection: {
     paddingHorizontal: 20,
@@ -436,9 +429,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     position: 'relative',
   },
-  workoutEmoji: {
-    fontSize: 40,
-  },
   favoriteButton: {
     position: 'absolute',
     top: 8,
@@ -494,9 +484,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
-  },
-  exerciseEmoji: {
-    fontSize: 24,
   },
   exerciseInfo: {
     flex: 1,

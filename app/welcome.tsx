@@ -1,16 +1,16 @@
-import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
 import React, { useRef, useState } from 'react';
 import {
   Dimensions,
   Image,
+  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import PagerView from 'react-native-pager-view';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { storageService } from '../storage/storageService';
 
 const { width, height } = Dimensions.get('window');
@@ -39,11 +39,15 @@ const onboardingData = [
 const WelcomeScreen = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const pagerRef = useRef<PagerView>(null);
+  const navigation = useNavigation();
 
   const handleGetStarted = async () => {
     console.log('📚 Marking onboarding as completed');
     await storageService.setOnboardingCompleted(true);
-    router.replace('/auth/signin' as any);
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'SignIn' }],
+    });
   };
 
   const handleNext = () => {
@@ -55,7 +59,7 @@ const WelcomeScreen = () => {
   };
 
   const handleSignIn = () => {
-    router.push('/auth/signin' as any);
+    navigation.navigate('SignIn' as never);
   };
 
   const renderContent = (item: typeof onboardingData[0], index: number) => (
@@ -125,7 +129,7 @@ const WelcomeScreen = () => {
   );
 
   return (
-    <SafeAreaView style={styles.container} edges={[]}>
+    <SafeAreaView style={styles.container}>
       <PagerView
         ref={pagerRef}
         style={styles.container}

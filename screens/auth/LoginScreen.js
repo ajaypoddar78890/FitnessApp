@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
+    Alert,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
+import Feather from 'react-native-vector-icons/Feather';
 
 import { useAuth } from '../../context/AuthContext';
 import { colors, spacing, typography } from '../../theme';
@@ -106,7 +106,7 @@ const LoginScreen = ({ navigation }) => {
                   style={styles.eyeButton}
                   onPress={() => setShowPassword(!showPassword)}
                 >
-                  <Ionicons
+                  <Feather
                     name={showPassword ? 'eye-off' : 'eye'}
                     size={20}
                     color={colors.text.secondary}
@@ -139,12 +139,12 @@ const LoginScreen = ({ navigation }) => {
             </View>
 
             <TouchableOpacity style={styles.socialButton}>
-              <Ionicons name="logo-google" size={20} color={colors.error} />
+              <Feather name="mail" size={20} color={colors.error} />
               <Text style={styles.socialButtonText}>Continue with Google</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.socialButton}>
-              <Ionicons name="logo-apple" size={20} color={colors.text.primary} />
+              <Feather name="smartphone" size={20} color={colors.text.primary} />
               <Text style={styles.socialButtonText}>Continue with Apple</Text>
             </TouchableOpacity>
           </View>

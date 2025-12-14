@@ -1,6 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Feather from 'react-native-vector-icons/Feather';
 import { colors, spacing, typography } from '../../theme';
 
 const WorkoutCard = ({ 
@@ -64,7 +63,7 @@ const WorkoutCard = ({
                 onPress={() => onEdit(workout)}
                 style={styles.actionButton}
               >
-                <Ionicons name="pencil" size={18} color={colors.text.secondary} />
+                <Feather name="edit-2" size={18} color={colors.text.secondary} />
               </TouchableOpacity>
             )}
             {onDelete && (
@@ -72,7 +71,7 @@ const WorkoutCard = ({
                 onPress={() => onDelete(workout)}
                 style={styles.actionButton}
               >
-                <Ionicons name="trash" size={18} color={colors.error} />
+                <Feather name="trash" size={18} color={colors.error} />
               </TouchableOpacity>
             )}
           </View>
@@ -86,12 +85,12 @@ const WorkoutCard = ({
 
         <View style={styles.details}>
           <View style={styles.detailItem}>
-            <Ionicons name="time-outline" size={16} color={colors.text.secondary} />
+            <Feather name="clock" size={16} color={colors.text.secondary} />
             <Text style={styles.detailText}>{formatDuration(duration)}</Text>
           </View>
 
           <View style={styles.detailItem}>
-            <Ionicons name="fitness-outline" size={16} color={colors.text.secondary} />
+            <Feather name="activity" size={16} color={colors.text.secondary} />
             <Text style={styles.detailText}>{exercises?.length || 0} exercises</Text>
           </View>
 
@@ -108,7 +107,7 @@ const WorkoutCard = ({
 
         {completed && (
           <View style={styles.completedBadge}>
-            <Ionicons name="checkmark-circle" size={20} color={colors.success} />
+            <Feather name="check-circle" size={20} color={colors.success} />
             <Text style={styles.completedText}>Completed</Text>
           </View>
         )}

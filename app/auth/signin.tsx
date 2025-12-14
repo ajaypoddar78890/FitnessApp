@@ -1,18 +1,18 @@
-import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Alert,
+    KeyboardAvoidingView,
+    Platform,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
+import Feather from 'react-native-vector-icons/Feather';
 import { useAuth } from '../../context/AuthContext';
 
 const SignInScreen = () => {
@@ -22,6 +22,7 @@ const SignInScreen = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const { login } = useAuth();
+  const navigation = useNavigation();
 
   const handleSignIn = async () => {
     console.log('👤 User attempted to log in');
@@ -43,7 +44,10 @@ const SignInScreen = () => {
       
       if (result.success) {
         console.log('✅ Login successful! Navigating to main app...');
-        router.replace('/(tabs)');
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Tabs' }],
+        });
       } else {
         console.log('❌ Login failed:', result.error);
         Alert.alert('Login Failed', result.error || 'Please check your credentials and try again');
@@ -66,7 +70,7 @@ const SignInScreen = () => {
   };
 
   const handleSignUp = () => {
-    router.push('/auth/signup' as any);
+    navigation.navigate('SignUp' as never);
   };
 
   return (
@@ -113,7 +117,7 @@ const SignInScreen = () => {
                   style={styles.eyeIcon}
                   onPress={() => setShowPassword(!showPassword)}
                 >
-                  <Ionicons
+                  <Feather
                     name={showPassword ? 'eye-off' : 'eye'}
                     size={20}
                     color="#6b7280"
@@ -147,21 +151,21 @@ const SignInScreen = () => {
                   style={styles.socialButton}
                   onPress={() => handleSocialSignIn('Apple')}
                 >
-                  <Ionicons name="logo-apple" size={24} color="#fff" />
+                  <Feather name="smartphone" size={24} color="#fff" />
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   style={styles.socialButton}
                   onPress={() => handleSocialSignIn('Facebook')}
                 >
-                  <Ionicons name="logo-facebook" size={24} color="#fff" />
+                  <Feather name="facebook" size={24} color="#fff" />
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   style={styles.socialButton}
                   onPress={() => handleSocialSignIn('Google')}
                 >
-                  <Ionicons name="logo-google" size={24} color="#fff" />
+                  <Feather name="mail" size={24} color="#fff" />
                 </TouchableOpacity>
               </View>
             </View>

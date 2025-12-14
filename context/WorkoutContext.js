@@ -1,6 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Alert } from 'react-native';
-import { workoutApi } from '../api/workoutApi';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { storageService } from '../storage/storageService';
 import { useAuth } from './AuthContext';
 
@@ -24,34 +22,48 @@ export const WorkoutProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (isAuthenticated && token) {
-      loadWorkouts();
-      loadExercises();
-    }
-  }, [isAuthenticated, token]);
+    // Initialize with mock data directly - no API calls
+    loadMockData();
+  }, []);
 
-  const loadWorkouts = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      const response = await workoutApi.getWorkouts(token);
-      setWorkouts(response.workouts || []);
-    } catch (error) {
-      console.error('Error loading workouts:', error);
-      setError('Failed to load workouts');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const loadMockData = () => {
+    setWorkouts([
+      {
+        id: '1',
+        title: 'Morning Cardio',
+        level: 'Beginner',
+        duration: '15 min',
+        category: 'Cardio',
+        caloriesBurned: 120,
+        date: new Date().toISOString(),
+      },
+      {
+        id: '2',
+        title: 'Strength Training',
+        level: 'Intermediate',
+        duration: '30 min',
+        category: 'Gym',
+        caloriesBurned: 250,
+        date: new Date().toISOString(),
+      },
+      {
+        id: '3',
+        title: 'Evening Yoga',
+        level: 'Beginner',
+        duration: '20 min',
+        category: 'Yoga',
+        caloriesBurned: 80,
+        date: new Date().toISOString(),
+      },
+    ]);
 
-  const loadExercises = async () => {
-    try {
-      const response = await workoutApi.getExercises(token);
-      setExercises(response.exercises || []);
-    } catch (error) {
-      console.error('Error loading exercises:', error);
-      // Don't set error for exercises as it's not critical
-    }
+    setExercises([
+      { id: '1', name: 'Push-ups', targetArea: 'Chest', difficulty: 'Beginner' },
+      { id: '2', name: 'Squats', targetArea: 'Legs', difficulty: 'Beginner' },
+      { id: '3', name: 'Pull-ups', targetArea: 'Back', difficulty: 'Intermediate' },
+      { id: '4', name: 'Plank', targetArea: 'Core', difficulty: 'Beginner' },
+      { id: '5', name: 'Deadlifts', targetArea: 'Back', difficulty: 'Advanced' },
+    ]);
   };
 
   const createWorkout = async (workoutData) => {
@@ -236,8 +248,6 @@ export const WorkoutProvider = ({ children }) => {
     workoutSession,
     isLoading,
     error,
-    loadWorkouts,
-    loadExercises,
     createWorkout,
     updateWorkout,
     deleteWorkout,

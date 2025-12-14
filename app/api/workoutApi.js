@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '../../constants/api';
+import { getApiBaseUrl } from '../../constants/api';
 
 const WORKOUT_ENDPOINTS = {
   WORKOUTS: '/workouts',
@@ -9,7 +9,7 @@ const WORKOUT_ENDPOINTS = {
 export const workoutApi = {
   getWorkouts: async (token) => {
     try {
-      const response = await fetch(`${API_BASE_URL}${WORKOUT_ENDPOINTS.WORKOUTS}`, {
+      const response = await fetch(`${getApiBaseUrl()}${WORKOUT_ENDPOINTS.WORKOUTS}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -30,7 +30,7 @@ export const workoutApi = {
 
   createWorkout: async (token, workoutData) => {
     try {
-      const response = await fetch(`${API_BASE_URL}${WORKOUT_ENDPOINTS.WORKOUTS}`, {
+      const response = await fetch(`${getApiBaseUrl()}${WORKOUT_ENDPOINTS.WORKOUTS}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -52,7 +52,7 @@ export const workoutApi = {
 
   updateWorkout: async (token, workoutId, workoutData) => {
     try {
-      const response = await fetch(`${API_BASE_URL}${WORKOUT_ENDPOINTS.WORKOUTS}/${workoutId}`, {
+      const response = await fetch(`${getApiBaseUrl()}${WORKOUT_ENDPOINTS.WORKOUTS}/${workoutId}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -74,7 +74,7 @@ export const workoutApi = {
 
   deleteWorkout: async (token, workoutId) => {
     try {
-      const response = await fetch(`${API_BASE_URL}${WORKOUT_ENDPOINTS.WORKOUTS}/${workoutId}`, {
+      const response = await fetch(`${getApiBaseUrl()}${WORKOUT_ENDPOINTS.WORKOUTS}/${workoutId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -90,7 +90,7 @@ export const workoutApi = {
 
   getExercises: async (token) => {
     try {
-      const response = await fetch(`${API_BASE_URL}${WORKOUT_ENDPOINTS.EXERCISES}`, {
+      const response = await fetch(`${getApiBaseUrl()}${WORKOUT_ENDPOINTS.EXERCISES}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -111,7 +111,7 @@ export const workoutApi = {
 
   startWorkoutSession: async (token, workoutId) => {
     try {
-      const response = await fetch(`${API_BASE_URL}${WORKOUT_ENDPOINTS.SESSIONS}`, {
+      const response = await fetch(`${getApiBaseUrl()}${WORKOUT_ENDPOINTS.SESSIONS}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -133,7 +133,7 @@ export const workoutApi = {
 
   endWorkoutSession: async (token, sessionId, sessionData) => {
     try {
-      const response = await fetch(`${API_BASE_URL}${WORKOUT_ENDPOINTS.SESSIONS}/${sessionId}`, {
+      const response = await fetch(`${getApiBaseUrl()}${WORKOUT_ENDPOINTS.SESSIONS}/${sessionId}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,

@@ -1,8 +1,7 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Ionicons } from '@expo/vector-icons';
+// import VectorIcon from 'react-native-vector-icons/Ionicons';
+import { Text } from 'react-native';
 
 import { useAuth } from '../context/AuthContext';
 import { colors } from '../theme';
@@ -13,14 +12,14 @@ import RegisterScreen from '../screens/auth/RegisterScreen';
 
 // Main Screens
 import HomeScreen from '../screens/main/HomeScreen';
-import WorkoutsScreen from '../screens/workouts/WorkoutsScreen';
-import StatsScreen from '../screens/stats/StatsScreen';
 import ProfileScreen from '../screens/profile/ProfileScreen';
+import StatsScreen from '../screens/stats/StatsScreen';
+import WorkoutsScreen from '../screens/workouts/WorkoutsScreen';
 
 // Workout Screens
+import CreateWorkoutScreen from '../screens/workouts/CreateWorkoutScreen';
 import WorkoutDetailScreen from '../screens/workouts/WorkoutDetailScreen';
 import WorkoutSessionScreen from '../screens/workouts/WorkoutSessionScreen';
-import CreateWorkoutScreen from '../screens/workouts/CreateWorkoutScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -104,7 +103,7 @@ const MainTabs = () => (
             iconName = 'home-outline';
         }
 
-        return <Ionicons name={iconName} size={size} color={color} />;
+        return <Text style={{fontSize: size, color}}>{iconName.slice(0,1).toUpperCase()}</Text>;
       },
       tabBarActiveTintColor: colors.primary,
       tabBarInactiveTintColor: colors.text.secondary,
@@ -137,11 +136,7 @@ const AppNavigator = () => {
     return null;
   }
 
-  return (
-    <NavigationContainer>
-      {isAuthenticated ? <MainTabs /> : <AuthStack />}
-    </NavigationContainer>
-  );
+  return isAuthenticated ? <MainTabs /> : <AuthStack />;
 };
 
 export default AppNavigator;

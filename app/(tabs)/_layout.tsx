@@ -1,59 +1,61 @@
-import { Tabs } from 'expo-router';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import React from 'react';
+import Feather from 'react-native-vector-icons/Feather';
+import { Colors } from '../../constants/theme';
+import { useColorScheme } from '../../hooks/use-color-scheme';
 
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+// Import your tab screens
+import DevicesScreen from './devices';
+import IndexScreen from './index';
+import MeScreen from './me';
+import WorkoutsScreen from './workouts';
+
+const Tab = createMaterialBottomTabNavigator();
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <Tabs
-      initialRouteName={"devices"}
+    <Tab.Navigator
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tabIconSelected,
-        tabBarInactiveTintColor: Colors[colorScheme ?? 'light'].tabIconDefault,
         headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarStyle: {
-          backgroundColor: Colors[colorScheme ?? 'light'].background,
-          borderTopWidth: 0,
-          height: 68,
-          paddingBottom: 10,
-          paddingTop: 8,
-        },
-        tabBarShowLabel: true,
+      }}
+      barStyle={{
+        backgroundColor: Colors[colorScheme ?? 'light'].background,
       }}>
-      <Tabs.Screen
+      <Tab.Screen
         name="index"
+        component={IndexScreen}
         options={{
-          title: 'Health',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: 'Home',
+          tabBarIcon: ({ color }) => <Feather name="home" size={26} color={color} />,
         }}
       />
-      <Tabs.Screen
+      <Tab.Screen
         name="workouts"
+        component={WorkoutsScreen}
         options={{
-          title: 'Workouts',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="dumbbell.fill" color={color} />,
+          title: 'Trainings',
+          tabBarIcon: ({ color }) => <Feather name="activity" size={26} color={color} />,
         }}
       />
-      <Tabs.Screen
-        name="devices"
+      <Tab.Screen
+        name="me"
+        
+         component={DevicesScreen}
         options={{
           title: 'Activity',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="target" color={color} />,
+          tabBarIcon: ({ color }) => <Feather name="bar-chart-2" size={26} color={color} />,
         }}
       />
-      <Tabs.Screen
-        name="me"
+      <Tab.Screen
+        name="devices"
+         component={MeScreen}
         options={{
-          title: 'Me',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={color} />,
+          title: 'Profile',
+          tabBarIcon: ({ color }) => <Feather name="user" size={26} color={color} />,
         }}
       />
-    </Tabs>
+    </Tab.Navigator>
   );
 }

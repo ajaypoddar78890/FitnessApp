@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Feather from 'react-native-vector-icons/Feather';
 import { colors, spacing, typography } from '../../theme';
 
 const StatsCard = ({
@@ -18,21 +17,21 @@ const StatsCard = ({
     {
       key: 'workoutsCompleted',
       label: 'Workouts',
-      icon: 'fitness',
+      icon: 'activity',
       color: colors.primary,
       value: statsData?.workoutsCompleted || 0,
     },
     {
       key: 'totalTime',
       label: 'Total Time',
-      icon: 'time',
+      icon: 'clock',
       color: colors.success,
       value: formatTime(statsData?.totalTime || 0),
     },
     {
       key: 'caloriesBurned',
       label: 'Calories',
-      icon: 'flame',
+      icon: 'zap',
       color: colors.warning,
       value: statsData?.caloriesBurned || 0,
     },
@@ -79,7 +78,7 @@ const StatsCard = ({
   const renderStatItem = (item) => (
     <View key={item.key} style={styles.statItem}>
       <View style={[styles.statIcon, { backgroundColor: item.color }]}>
-        <Ionicons name={item.icon} size={20} color={colors.white} />
+            <Feather name={item.icon} size={20} color={colors.white} />
       </View>
       <Text style={styles.statValue}>{item.value}</Text>
       <Text style={styles.statLabel}>{item.label}</Text>
@@ -133,8 +132,8 @@ const StatsCard = ({
           {statsData.recentAchievements.map((achievement, index) => (
             <View key={index} style={styles.achievementItem}>
               <View style={styles.achievementIcon}>
-                <Ionicons
-                  name={achievement.icon || 'trophy'}
+                <Feather
+                  name={achievement.icon || 'award'}
                   size={24}
                   color={colors.warning}
                 />
@@ -172,7 +171,7 @@ const StatsCard = ({
           <Text style={styles.comparisonTitle}>vs Last {selectedPeriod}</Text>
           <View style={styles.comparisonStats}>
             <View style={styles.comparisonItem}>
-              <Ionicons
+              <Feather
                 name={statsData.comparison.workouts >= 0 ? 'trending-up' : 'trending-down'}
                 size={20}
                 color={statsData.comparison.workouts >= 0 ? colors.success : colors.error}
@@ -190,7 +189,7 @@ const StatsCard = ({
               <Text style={styles.comparisonLabel}>workouts</Text>
             </View>
             <View style={styles.comparisonItem}>
-              <Ionicons
+              <Feather
                 name={statsData.comparison.time >= 0 ? 'trending-up' : 'trending-down'}
                 size={20}
                 color={statsData.comparison.time >= 0 ? colors.success : colors.error}

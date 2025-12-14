@@ -1,6 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Feather from 'react-native-vector-icons/Feather';
 import { colors, spacing, typography } from '../../theme';
 
 const ProfileCard = ({
@@ -38,7 +37,7 @@ const ProfileCard = ({
             <Image source={{ uri: avatar }} style={styles.avatar} />
           ) : (
             <View style={styles.defaultAvatar}>
-              <Ionicons name="person" size={40} color={colors.text.secondary} />
+              <Feather name="user" size={40} color={colors.text.secondary} />
             </View>
           )}
         </TouchableOpacity>
@@ -52,7 +51,7 @@ const ProfileCard = ({
         </View>
 
         <TouchableOpacity style={styles.editButton} onPress={onEdit}>
-          <Ionicons name="pencil" size={20} color={colors.primary} />
+          <Feather name="edit-2" size={20} color={colors.primary} />
         </TouchableOpacity>
       </View>
 
@@ -76,7 +75,7 @@ const ProfileCard = ({
       <View style={styles.statsGrid}>
         <TouchableOpacity style={styles.statItem} onPress={onViewStats}>
           <View style={styles.statIcon}>
-            <Ionicons name="flame" size={24} color={colors.primary} />
+            <Feather name="zap" size={24} color={colors.primary} />
           </View>
           <Text style={styles.statValue}>{streak}</Text>
           <Text style={styles.statLabel}>Day Streak</Text>
@@ -84,7 +83,7 @@ const ProfileCard = ({
 
         <TouchableOpacity style={styles.statItem} onPress={onViewStats}>
           <View style={styles.statIcon}>
-            <Ionicons name="fitness" size={24} color={colors.success} />
+            <Feather name="activity" size={24} color={colors.success} />
           </View>
           <Text style={styles.statValue}>{totalWorkouts}</Text>
           <Text style={styles.statLabel}>Workouts</Text>
@@ -92,7 +91,7 @@ const ProfileCard = ({
 
         <TouchableOpacity style={styles.statItem} onPress={onViewStats}>
           <View style={styles.statIcon}>
-            <Ionicons name="trophy" size={24} color={colors.warning} />
+            <Feather name="award" size={24} color={colors.warning} />
           </View>
           <Text style={styles.statValue}>{level}</Text>
           <Text style={styles.statLabel}>Level</Text>
@@ -101,12 +100,12 @@ const ProfileCard = ({
 
       <View style={styles.actions}>
         <TouchableOpacity style={styles.actionButton} onPress={onViewStats}>
-          <Ionicons name="bar-chart" size={20} color={colors.white} />
+          <Feather name="bar-chart-2" size={20} color={colors.white} />
           <Text style={styles.actionText}>View Stats</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.secondaryButton} onPress={onSettings}>
-          <Ionicons name="settings" size={20} color={colors.primary} />
+          <Feather name="settings" size={20} color={colors.primary} />
           <Text style={styles.secondaryText}>Settings</Text>
         </TouchableOpacity>
       </View>

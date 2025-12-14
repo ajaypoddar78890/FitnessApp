@@ -1,4 +1,3 @@
-import { router } from 'expo-router';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { authApi } from '../api/authApi';
 import { storageService } from '../storage/storageService';
@@ -161,8 +160,8 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
       setIsAuthenticated(false);
       
-      console.log('🔄 Redirecting to login page...');
-      router.replace('/auth/signin');
+      console.log('🔄 User logged out');
+      // Navigation is handled by AppNavigator based on isAuthenticated state
       console.log('✅ Logout process completed');
     }
   };

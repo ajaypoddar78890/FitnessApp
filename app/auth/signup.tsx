@@ -1,18 +1,18 @@
-import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Alert,
+    KeyboardAvoidingView,
+    Platform,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
+import Feather from 'react-native-vector-icons/Feather';
 import { signUp as apiSignUp } from '../../api/authApi';
 
 const SignUpScreen = () => {
@@ -23,6 +23,8 @@ const SignUpScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [acceptedPrivacy, setAcceptedPrivacy] = useState(false);
+
+  const navigation = useNavigation();
 
   // If you have an auth context with a register method you can use it instead.
   // For now we call the centralized API helper directly.
@@ -47,7 +49,10 @@ const SignUpScreen = () => {
       console.log('SignUp Screen: Signup successful:', result);
       // result is expected to contain at least user/accessToken depending on backend
       // Navigate into the app on success
-      router.replace('/(tabs)');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Tabs' }],
+      });
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       console.error('SignUp Screen: Signup failed:', msg);
@@ -62,7 +67,7 @@ const SignUpScreen = () => {
   };
 
   const handleSignIn = () => {
-    router.push('/auth/signin' as any);
+    navigation.navigate('SignIn' as never);
   };
 
   return (
@@ -134,7 +139,7 @@ const SignUpScreen = () => {
                   style={styles.eyeIcon}
                   onPress={() => setShowPassword(!showPassword)}
                 >
-                  <Ionicons
+                  <Feather
                     name={showPassword ? 'eye-off' : 'eye'}
                     size={20}
                     color="#6b7280"
@@ -149,7 +154,7 @@ const SignUpScreen = () => {
               >
                 <View style={[styles.checkbox, acceptedPrivacy && styles.checkboxChecked]}>
                   {acceptedPrivacy && (
-                    <Ionicons name="checkmark" size={16} color="#fff" />
+                    <Feather name="check" size={16} color="#fff" />
                   )}
                 </View>
                 <Text style={styles.privacyText}>
@@ -178,21 +183,21 @@ const SignUpScreen = () => {
                   style={styles.socialButton}
                   onPress={() => handleSocialSignIn('Apple')}
                 >
-                  <Ionicons name="logo-apple" size={24} color="#fff" />
+                  <Feather name="smartphone" size={24} color="#fff" />
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   style={styles.socialButton}
                   onPress={() => handleSocialSignIn('Facebook')}
                 >
-                  <Ionicons name="logo-facebook" size={24} color="#fff" />
+                  <Feather name="facebook" size={24} color="#fff" />
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   style={styles.socialButton}
                   onPress={() => handleSocialSignIn('Google')}
                 >
-                  <Ionicons name="logo-google" size={24} color="#fff" />
+                  <Feather name="mail" size={24} color="#fff" />
                 </TouchableOpacity>
               </View>
             </View>

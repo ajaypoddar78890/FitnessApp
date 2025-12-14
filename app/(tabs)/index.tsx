@@ -1,13 +1,13 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import HomeScreen from '../../screens/main/HomeScreen';
 
-// Mock navigation object for now
-const mockNavigation = {
-  navigate: (screen: string, params?: any) => {
-    console.log('Navigate to:', screen, params);
-  }
-};
-
 export default function HomeTab() {
-  return <HomeScreen navigation={mockNavigation} />;
+  const navigation = useNavigation();
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <HomeScreen navigation={navigation} />
+    </SafeAreaView>
+  );
 }

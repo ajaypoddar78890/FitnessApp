@@ -1,14 +1,15 @@
-import { ThemedText } from '@/components/themed-text';
-import { Colors } from '@/constants/theme';
-import { router } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
+import { ThemedText } from '../components/themed-text';
+import { Colors } from '../constants/theme';
 import { useAuth } from '../context/AuthContext';
 import { storageService } from '../storage/storageService';
 
 export default function IndexScreen() {
   const { isAuthenticated, isLoading, user } = useAuth();
   const [isCheckingOnboarding, setIsCheckingOnboarding] = useState(true);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const checkInitialRoute = async () => {
@@ -16,18 +17,18 @@ export default function IndexScreen() {
         if (isAuthenticated && user) {
           console.log('🏠 User is authenticated - redirecting to main app');
           // User is logged in, go to main app
-          router.replace('/(tabs)');
+          navigation.navigate('tabs' as any);
         } else {
           // Check if onboarding was completed for new users
           const onboardingCompleted = await storageService.isOnboardingCompleted();
           if (onboardingCompleted) {
-            console.log('� Onboarding completed - redirecting to signin');
+            console.log('✅ Onboarding completed - redirecting to signin');
             // User has seen onboarding, go to signin
-            router.replace('/auth/signin');
+            navigation.navigate('auth' as any);
           } else {
             console.log('👋 New user - showing welcome screens');
             // First time user, show welcome/onboarding
-            router.replace('/welcome');
+            navigation.navigate('welcome' as any);
           }
         }
         setIsCheckingOnboarding(false);
@@ -35,7 +36,7 @@ export default function IndexScreen() {
     };
 
     checkInitialRoute();
-  }, [isLoading, isAuthenticated, user]);
+  }, [isLoading, isAuthenticated, user, navigation]);
 
   // Show loading screen while checking authentication and onboarding
   if (isLoading || isCheckingOnboarding) {

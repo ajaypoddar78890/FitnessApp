@@ -1,16 +1,17 @@
+import { useNavigation, useRoute } from '@react-navigation/native';
 import React from 'react';
 import {
-  View,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-  Dimensions,
+    Dimensions,
+    Image,
+    ScrollView,
+    StyleSheet,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ThemedText } from '@/components/themed-text';
-import { Ionicons } from '@expo/vector-icons';
-import { useLocalSearchParams, router } from 'expo-router';
+import Feather from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { ThemedText } from '../components/themed-text';
 
 const { width } = Dimensions.get('window');
 
@@ -38,7 +39,7 @@ const getExerciseData = (exerciseName: string): ExerciseData => {
         'Jump back to the starting position',
         'Maintain a steady rhythm and keep your core engaged'
       ],
-      image: require('@/assets/images/onboaring3.webp'),
+      image: require('../assets/images/onboaring3.webp'),
       duration: '30 seconds',
       difficulty: 'Beginner',
       muscleGroups: ['Full Body', 'Cardiovascular']
@@ -53,7 +54,7 @@ const getExerciseData = (exerciseName: string): ExerciseData => {
         'Keep your core tight and maintain good posture',
         'Pump your arms naturally as you run'
       ],
-      image: require('@/assets/images/onboaring2.webp'),
+      image: require('../assets/images/onboaring2.webp'),
       duration: '30 seconds',
       difficulty: 'Intermediate',
       muscleGroups: ['Legs', 'Core', 'Cardiovascular']
@@ -68,7 +69,7 @@ const getExerciseData = (exerciseName: string): ExerciseData => {
         'Keep your body in a straight line from head to heels',
         'Push back up to starting position'
       ],
-      image: require('@/assets/images/onboaring1.webp'),
+      image: require('../assets/images/onboaring1.webp'),
       reps: '10-15 reps',
       difficulty: 'Intermediate',
       muscleGroups: ['Chest', 'Shoulders', 'Triceps', 'Core']
@@ -83,7 +84,7 @@ const getExerciseData = (exerciseName: string): ExerciseData => {
         'Keep your chest up and knees behind your toes',
         'Return to standing by driving through your heels'
       ],
-      image: require('@/assets/images/onboaring3.webp'),
+      image: require('../assets/images/onboaring3.webp'),
       reps: '15-20 reps',
       difficulty: 'Beginner',
       muscleGroups: ['Quads', 'Glutes', 'Hamstrings', 'Core']
@@ -96,7 +97,7 @@ const getExerciseData = (exerciseName: string): ExerciseData => {
         'Inhale while pushing your hips back and lowering into a squat position. Keep your core tight, back straight, and knees forward during this movement.',
         'Exhale while returning to the starting position. Focus on keeping your weight evenly distributed throughout your heel and midfoot.'
       ],
-      image: require('@/assets/images/onboaring2.webp'),
+      image: require('../assets/images/onboaring2.webp'),
       reps: '12-15 reps',
       difficulty: 'Intermediate',
       muscleGroups: ['Glutes', 'Inner Thighs', 'Quads', 'Core']
@@ -111,7 +112,7 @@ const getExerciseData = (exerciseName: string): ExerciseData => {
         'Lower until both knees are bent at 90 degrees',
         'Push back to starting position and repeat on other leg'
       ],
-      image: require('@/assets/images/onboaring1.webp'),
+      image: require('../assets/images/onboaring1.webp'),
       reps: '10-12 per leg',
       difficulty: 'Intermediate',
       muscleGroups: ['Quads', 'Glutes', 'Hamstrings', 'Calves']
@@ -126,7 +127,7 @@ const getExerciseData = (exerciseName: string): ExerciseData => {
         'Quickly switch legs, bringing the other knee forward',
         'Continue alternating at a rapid pace'
       ],
-      image: require('@/assets/images/onboaring3.webp'),
+      image: require('../assets/images/onboaring3.webp'),
       duration: '30 seconds',
       difficulty: 'Advanced',
       muscleGroups: ['Core', 'Shoulders', 'Legs', 'Cardiovascular']
@@ -137,17 +138,18 @@ const getExerciseData = (exerciseName: string): ExerciseData => {
 };
 
 export default function ExerciseDetails() {
-  const params = useLocalSearchParams();
-  const { exerciseName, fromWorkout } = params;
+  const navigation = useNavigation();
+  const route = useRoute();
+  const { exerciseName, fromWorkout } = route.params || {};
   
   const exerciseData = getExerciseData(exerciseName as string);
 
   const handleBack = () => {
-    router.back();
+    navigation.goBack();
   };
 
   const handleClose = () => {
-    router.back();
+    navigation.goBack();
   };
 
   return (
@@ -160,7 +162,7 @@ export default function ExerciseDetails() {
           
           {/* Back Button */}
           <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-            <Ionicons name="arrow-back" size={24} color="#fff" />
+            <Feather name="arrow-left" size={24} color="#fff" />
           </TouchableOpacity>
         </View>
 
@@ -171,11 +173,11 @@ export default function ExerciseDetails() {
             <ThemedText style={styles.exerciseTitle}>{exerciseData.name}</ThemedText>
             <View style={styles.metaInfo}>
               <View style={styles.metaItem}>
-                <Ionicons name="barbell" size={16} color="#a855f7" />
+                <Feather name="activity" size={16} color="#a855f7" />
                 <ThemedText style={styles.metaText}>{exerciseData.difficulty}</ThemedText>
               </View>
               <View style={styles.metaItem}>
-                <Ionicons name="time" size={16} color="#a855f7" />
+                <Feather name="clock" size={16} color="#a855f7" />
                 <ThemedText style={styles.metaText}>
                   {exerciseData.duration || exerciseData.reps}
                 </ThemedText>
@@ -197,7 +199,7 @@ export default function ExerciseDetails() {
               {exerciseData.equipment.map((item, index) => (
                 <View key={index} style={styles.equipmentItem}>
                   <View style={styles.equipmentIcon}>
-                    <Ionicons name="barbell" size={20} color="#a855f7" />
+                    <Icon name="barbell" size={20} color="#a855f7" />
                   </View>
                   <ThemedText style={styles.equipmentText}>{item}</ThemedText>
                 </View>

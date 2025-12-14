@@ -1,6 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Feather from 'react-native-vector-icons/Feather';
 import { colors, spacing, typography } from '../../theme';
 
 const WorkoutTimer = ({
@@ -48,7 +47,7 @@ const WorkoutTimer = ({
       <View style={styles.controls}>
         {!isActive && !isPaused ? (
           <TouchableOpacity style={styles.startButton} onPress={onStart}>
-            <Ionicons name="play" size={24} color={colors.white} />
+            <Feather name="play" size={24} color={colors.white} />
             <Text style={styles.buttonText}>Start</Text>
           </TouchableOpacity>
         ) : (
@@ -56,7 +55,7 @@ const WorkoutTimer = ({
             style={isPaused ? styles.startButton : styles.pauseButton}
             onPress={isPaused ? onStart : onPause}
           >
-            <Ionicons
+            <Feather
               name={isPaused ? "play" : "pause"}
               size={24}
               color={colors.white}
@@ -69,14 +68,14 @@ const WorkoutTimer = ({
 
         {(isActive || isPaused) && (
           <TouchableOpacity style={styles.stopButton} onPress={onStop}>
-            <Ionicons name="stop" size={24} color={colors.white} />
+            <Feather name="stop" size={24} color={colors.white} />
             <Text style={styles.buttonText}>Stop</Text>
           </TouchableOpacity>
         )}
 
         {time > 0 && (
           <TouchableOpacity style={styles.resetButton} onPress={onReset}>
-            <Ionicons name="refresh" size={20} color={colors.text.secondary} />
+            <Feather name="refresh-cw" size={20} color={colors.text.secondary} />
           </TouchableOpacity>
         )}
       </View>

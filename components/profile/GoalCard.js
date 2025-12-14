@@ -1,6 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Feather from 'react-native-vector-icons/Feather';
 import { colors, spacing, typography } from '../../theme';
 
 const GoalCard = ({
@@ -24,7 +23,7 @@ const GoalCard = ({
     {
       id: 'strength',
       title: 'Strength Goal',
-      icon: 'barbell',
+      icon: 'target',
       color: colors.warning,
     },
     {
@@ -63,7 +62,7 @@ const GoalCard = ({
       >
         <View style={styles.goalHeader}>
           <View style={[styles.goalIcon, { backgroundColor: goalType.color }]}>
-            <Ionicons name={goalType.icon} size={20} color={colors.white} />
+            <Feather name={goalType.icon} size={20} color={colors.white} />
           </View>
           <Text style={styles.goalTitle}>{goalType.title}</Text>
         </View>
@@ -105,14 +104,14 @@ const GoalCard = ({
 
             {progress >= 100 && (
               <View style={styles.completedBadge}>
-                <Ionicons name="trophy" size={16} color={colors.warning} />
+                <Feather name="award" size={16} color={colors.warning} />
                 <Text style={styles.completedText}>Completed!</Text>
               </View>
             )}
           </View>
         ) : (
           <View style={styles.addGoalPrompt}>
-            <Ionicons name="add-circle-outline" size={24} color={colors.text.secondary} />
+            <Feather name="plus-circle" size={24} color={colors.text.secondary} />
             <Text style={styles.addGoalText}>Set Goal</Text>
           </View>
         )}
@@ -125,7 +124,7 @@ const GoalCard = ({
       <View style={styles.header}>
         <Text style={styles.title}>My Goals</Text>
         <TouchableOpacity onPress={() => onAddGoal()}>
-          <Ionicons name="add" size={24} color={colors.primary} />
+          <Feather name="plus" size={24} color={colors.primary} />
         </TouchableOpacity>
       </View>
 

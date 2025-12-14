@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
-  Alert,
+    Alert,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import Feather from 'react-native-vector-icons/Feather';
 import { colors, spacing, typography } from '../../theme';
 
 const ExerciseItem = ({
@@ -94,7 +94,7 @@ const ExerciseItem = ({
           )}
         </View>
         {isCompleted && (
-          <Ionicons name="checkmark-circle" size={24} color={colors.success} />
+          <Feather name="check-circle" size={24} color={colors.success} />
         )}
       </View>
 
@@ -144,8 +144,8 @@ const ExerciseItem = ({
               ]}
               onPress={() => completeSet(index)}
             >
-              <Ionicons
-                name={set.completed ? "checkmark" : "ellipse-outline"}
+              <Feather
+                name={set.completed ? "check" : "circle"}
                 size={20}
                 color={set.completed ? colors.white : colors.primary}
               />
@@ -155,13 +155,13 @@ const ExerciseItem = ({
               style={styles.removeButton}
               onPress={() => removeSet(index)}
             >
-              <Ionicons name="close" size={18} color={colors.error} />
+              <Feather name="x" size={18} color={colors.error} />
             </TouchableOpacity>
           </View>
         ))}
 
         <TouchableOpacity style={styles.addSetButton} onPress={addSet}>
-          <Ionicons name="add" size={20} color={colors.primary} />
+          <Feather name="plus" size={20} color={colors.primary} />
           <Text style={styles.addSetText}>Add Set</Text>
         </TouchableOpacity>
       </View>

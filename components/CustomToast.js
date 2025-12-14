@@ -76,10 +76,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 100, // Position at bottom instead of top
     left: '50%', // Center horizontally
-    marginLeft: -150, // Half of width to center (300/2 = 150)
-    width: 300, // Fixed width instead of full screen
+    marginLeft: -175, // Half of width to center (350/2 = 175)
+    width: 350, // Fixed width instead of full screen
     backgroundColor: '#10b981',
-    paddingHorizontal: 16,
+    paddingHorizontal: 12,
     paddingVertical: 12,
     borderRadius: 12,
     zIndex: 9999,

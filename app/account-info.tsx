@@ -391,22 +391,6 @@ export default function AccountInfo({ navigation, route }) {
 
             </View>
 
-            {/* Debug: Show current payload */}
-            <View style={styles.section}>
-              <ThemedText style={styles.sectionTitle}>Debug: Current Payload</ThemedText>
-              <ThemedText style={{ fontSize: 12, color: Colors[theme].icon, fontFamily: 'monospace' }}>
-                {JSON.stringify({
-                  ...profile,
-                  age: profile.age ? Number(profile.age) : undefined,
-                  height: profile.height ? Number(profile.height) : undefined,
-                  weight: profile.weight ? Number(profile.weight) : undefined
-                }, (key, value) => {
-                  if (value === '' || value === undefined) return undefined;
-                  return value;
-                }, 2)}
-              </ThemedText>
-            </View>
-
             {/* Save Button */}
             <TouchableOpacity 
               style={[styles.saveButton, isLoading && styles.saveButtonDisabled]} 

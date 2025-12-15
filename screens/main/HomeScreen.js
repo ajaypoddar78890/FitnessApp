@@ -95,12 +95,32 @@ const HomeScreen = ({ navigation }) => {
   const testHealthConnect = async () => {
     setLoading(true);
     try {
+      // First check if the module is available
+      if (!healthConnectService.isAvailable) {
+        alert('Health Connect module is not properly installed. Please check the app build.');
+        return;
+      }
+
+      // First check if Health Connect is available
+      const available = await healthConnectService.isAvailable();
+      if (!available) {
+        alert('Health Connect is not available on this device. Please install Google Health Connect from the Play Store.');
+        return;
+      }
+
+      console.log('Initializing Health Connect...');
       await healthConnectService.initializeHealthConnect();
+      
+      console.log('Requesting permissions...');
       await healthConnectService.requestPermissions();
+      
+      console.log('Getting today\'s steps...');
       const todaySteps = await healthConnectService.getTodaySteps();
+      
       setSteps(todaySteps);
       alert(`Today's steps: ${todaySteps}`);
     } catch (error) {
+      console.error('Health Connect test error:', error);
       alert(`Error: ${error.message}`);
     } finally {
       setLoading(false);

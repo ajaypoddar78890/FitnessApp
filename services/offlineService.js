@@ -1,4 +1,4 @@
-import NetInfo from '@react-native-netinfo/netinfo';
+import NetInfo from '@react-native-community/netinfo';
 import { storageService } from '../storage/storageService';
 
 class OfflineService {

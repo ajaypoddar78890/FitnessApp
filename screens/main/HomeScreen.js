@@ -12,11 +12,14 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Feather from 'react-native-vector-icons/Feather';
+import { healthConnectService } from '../../services';
 
 const { width } = Dimensions.get('window');
 
 const HomeScreen = ({ navigation }) => {
   const [searchText, setSearchText] = useState('');
+  const [steps, setSteps] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const categories = [
     { id: 1, name: 'Cardio', icon: 'activity', color: '#FF6B6B' },
@@ -87,6 +90,21 @@ const HomeScreen = ({ navigation }) => {
   const handleExercisePress = (exercise) => {
     // Navigate to exercise details screen at root stack
     navigation.navigate('exercise-details', { exerciseName: exercise.name });
+  };
+
+  const testHealthConnect = async () => {
+    setLoading(true);
+    try {
+      await healthConnectService.initializeHealthConnect();
+      await healthConnectService.requestPermissions();
+      const todaySteps = await healthConnectService.getTodaySteps();
+      setSteps(todaySteps);
+      alert(`Today's steps: ${todaySteps}`);
+    } catch (error) {
+      alert(`Error: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const renderCategoryCard = ({ item }) => (
@@ -173,6 +191,22 @@ const HomeScreen = ({ navigation }) => {
               onChangeText={setSearchText}
             />
           </View>
+        </View>
+
+        {/* Health Connect Test */}
+        <View style={styles.testContainer}>
+          <TouchableOpacity 
+            style={styles.testButton}
+            onPress={testHealthConnect}
+            disabled={loading}
+          >
+            <Text style={styles.testButtonText}>
+              {loading ? 'Loading...' : 'Test Health Connect'}
+            </Text>
+          </TouchableOpacity>
+          {steps !== null && (
+            <Text style={styles.stepsText}>Today's Steps: {steps}</Text>
+          )}
         </View>
 
         {/* Category Section */}
@@ -500,6 +534,28 @@ const styles = StyleSheet.create({
   },
   exerciseInfoButton: {
     padding: 4,
+  },
+  testContainer: {
+    paddingHorizontal: 20,
+    marginBottom: 20,
+  },
+  testButton: {
+    backgroundColor: '#9662F1',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  testButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  stepsText: {
+    color: '#fff',
+    fontSize: 14,
+    textAlign: 'center',
+    marginTop: 10,
   },
 });
 

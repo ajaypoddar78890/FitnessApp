@@ -1,4 +1,3 @@
-import { LinearGradient } from 'expo-linear-gradient';
 import {
     Dimensions,
     SafeAreaView,
@@ -7,6 +6,7 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
 const { width, height } = Dimensions.get('window');
 

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
     Dimensions,
     SafeAreaView,
@@ -5,15 +6,76 @@ import {
     Text,
     TouchableOpacity,
     View,
+    Alert,
+    ActivityIndicator,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import { healthConnectService } from '../../services';
 
 const { width, height } = Dimensions.get('window');
 
 const WelcomeScreen = ({ navigation }) => {
-  const handleGetStarted = () => {
-    // Navigate to main app or login
-    navigation.navigate('(tabs)');
+  const [isSettingUp, setIsSettingUp] = useState(false);
+
+  const handleGetStarted = async () => {
+    setIsSettingUp(true);
+    
+    try {
+      // Check if Health Connect is available
+      const available = await healthConnectService.isAvailable();
+      
+      if (!available) {
+        // Health Connect not available - guide user to install
+        Alert.alert(
+          'Health Connect Setup',
+          'To track your steps and activity, you need Google Health Connect.\n\n• Android 14+: Already included\n• Android 13 and below: Download from Play Store\n\nInstall it now?',
+          [
+            { 
+              text: 'Skip for Now', 
+              style: 'cancel',
+              onPress: () => navigation.navigate('(tabs)')
+            },
+            { 
+              text: 'Install Now', 
+              onPress: () => {
+                healthConnectService.openHealthConnectPlayStore();
+                // Still navigate to main app - user can set up later
+                setTimeout(() => navigation.navigate('(tabs)'), 1000);
+              }
+            }
+          ]
+        );
+      } else {
+        // Health Connect available - request permissions
+        try {
+          await healthConnectService.requestPermissions();
+          Alert.alert(
+            'Setup Complete! 🎉',
+            'Health Connect is ready. You can now track your steps and activity.',
+            [{ text: 'Continue', onPress: () => navigation.navigate('(tabs)') }]
+          );
+        } catch (permissionError) {
+          console.log('Permission setup failed:', permissionError.message);
+          
+          // Permission failed, but still let user continue
+          Alert.alert(
+            'Setup Incomplete',
+            'Health Connect permissions were not granted. You can set this up later from the home screen.',
+            [{ text: 'Continue', onPress: () => navigation.navigate('(tabs)') }]
+          );
+        }
+      }
+    } catch (error) {
+      console.error('Health Connect setup error:', error);
+      // If setup fails, still let user continue to main app
+      Alert.alert(
+        'Welcome!',
+        'Welcome to FitooZone! You can set up health tracking later.',
+        [{ text: 'Continue', onPress: () => navigation.navigate('(tabs)') }]
+      );
+    } finally {
+      setIsSettingUp(false);
+    }
   };
 
   const handleSignIn = () => {
@@ -58,11 +120,19 @@ const WelcomeScreen = ({ navigation }) => {
 
           {/* Get Started Button */}
           <TouchableOpacity 
-            style={styles.getStartedButton}
+            style={[styles.getStartedButton, isSettingUp && styles.disabledButton]}
             onPress={handleGetStarted}
             activeOpacity={0.8}
+            disabled={isSettingUp}
           >
-            <Text style={styles.getStartedText}>Get Started</Text>
+            {isSettingUp ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator color="#fff" size="small" />
+                <Text style={styles.getStartedText}>Setting up...</Text>
+              </View>
+            ) : (
+              <Text style={styles.getStartedText}>Get Started</Text>
+            )}
           </TouchableOpacity>
 
           {/* Sign In Link */}
@@ -204,6 +274,15 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 8,
+  },
+  disabledButton: {
+    backgroundColor: '#6b46c1',
+    shadowOpacity: 0.1,
+  },
+  loadingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   getStartedText: {
     fontSize: 16,

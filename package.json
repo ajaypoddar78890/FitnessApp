@@ -1,5 +1,6 @@
 {
   "name": "myfitnessapp",
+  "description": "A comprehensive fitness tracking app with Health Connect integration for step counting and activity tracking. Requires Google Health Connect app on Android devices.",
   "main": "index.js",
   "version": "1.0.0",
   "scripts": {

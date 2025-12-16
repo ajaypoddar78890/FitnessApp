@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import {
+  Alert,
   Dimensions,
   FlatList,
   SafeAreaView,
@@ -92,36 +93,87 @@ const HomeScreen = ({ navigation }) => {
     navigation.navigate('exercise-details', { exerciseName: exercise.name });
   };
 
-  const testHealthConnect = async () => {
+  const testHealthConnectSimple = async () => {
     setLoading(true);
     try {
-      // First check if the module is available
-      if (!healthConnectService.isAvailable) {
-        alert('Health Connect module is not properly installed. Please check the app build.');
+      // Just test basic availability and initialization
+      if (!healthConnectService.moduleAvailable) {
+        Alert.alert('Module Error', 'Health Connect module is not available.');
         return;
       }
 
-      // First check if Health Connect is available
       const available = await healthConnectService.isAvailable();
       if (!available) {
-        alert('Health Connect is not available on this device. Please install Google Health Connect from the Play Store.');
+        Alert.alert('Not Available', 'Health Connect is not available on this device.');
+        return;
+      }
+
+      await healthConnectService.initializeHealthConnect();
+      Alert.alert('Success', 'Health Connect initialized successfully! The module is working.');
+      
+    } catch (error) {
+      console.error('Simple HC test error:', error);
+      Alert.alert('Error', `Health Connect initialization failed: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  const testHealthConnectFull = async () => {
+    setLoading(true);
+    try {
+      // First check if the module is available
+      if (!healthConnectService.moduleAvailable) {
+        Alert.alert('Module Error', 'Health Connect module is not properly installed. Please check the app build.');
         return;
       }
 
       console.log('Initializing Health Connect...');
       await healthConnectService.initializeHealthConnect();
       
-      console.log('Requesting permissions...');
-      await healthConnectService.requestPermissions();
+      // Try to get steps directly without requesting permissions first
+      // This will fail with a permission error if not granted, but won't crash
+      console.log('Attempting to get today\'s steps...');
+      try {
+        const todaySteps = await healthConnectService.getTodaySteps();
+        setSteps(todaySteps);
+        Alert.alert('Success', `Today's steps: ${todaySteps}`);
+      } catch (stepError) {
+        console.log('Step access failed, trying to request permissions...', stepError.message);
+        
+        // If step access fails, request permissions
+        console.log('Requesting permissions...');
+        await healthConnectService.requestPermissions();
+        
+        // Try again after permissions
+        console.log('Getting today\'s steps after permissions...');
+        const todaySteps = await healthConnectService.getTodaySteps();
+        setSteps(todaySteps);
+        Alert.alert('Success', `Today's steps: ${todaySteps}`);
+      }
       
-      console.log('Getting today\'s steps...');
-      const todaySteps = await healthConnectService.getTodaySteps();
-      
-      setSteps(todaySteps);
-      alert(`Today's steps: ${todaySteps}`);
     } catch (error) {
       console.error('Health Connect test error:', error);
-      alert(`Error: ${error.message}`);
+      
+      // Provide more specific error messages
+      if (error.message.includes('not installed')) {
+        Alert.alert(
+          'Health Connect Required',
+          'Health Connect is not installed on your device.\n\nHealth Connect is Google\'s health and fitness platform that securely manages your health data.\n\n• Android 14+: Built into Android\n• Android 13 and below: Download from Play Store\n\nWould you like to install it now?',
+          [
+            { text: 'Not Now', style: 'cancel' },
+            { text: 'Install Now', onPress: () => healthConnectService.openHealthConnectPlayStore() }
+          ]
+        );
+      } else if (error.message.includes('not supported')) {
+        Alert.alert('Not Supported', 'Health Connect is not supported on this device. Requires Android 8.0 (API 26) or higher.');
+      } else if (error.message.includes('Permissions not granted') || error.message.includes('denied')) {
+        Alert.alert('Permissions Required', 'Health Connect permissions were denied. Please grant permissions in the Health Connect app.');
+      } else if (error.message.includes('not available')) {
+        Alert.alert('Setup Required', 'Health Connect needs to be set up. Please open the Health Connect app and complete the setup.');
+      } else {
+        Alert.alert('Error', `Health Connect Error: ${error.message}`);
+      }
     } finally {
       setLoading(false);
     }
@@ -217,11 +269,20 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.testContainer}>
           <TouchableOpacity 
             style={styles.testButton}
-            onPress={testHealthConnect}
+            onPress={testHealthConnectFull}
             disabled={loading}
           >
             <Text style={styles.testButtonText}>
               {loading ? 'Loading...' : 'Test Health Connect'}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={[styles.testButton, styles.simpleTestButton]}
+            onPress={testHealthConnectSimple}
+            disabled={loading}
+          >
+            <Text style={styles.testButtonText}>
+              {loading ? 'Loading...' : 'Simple HC Test'}
             </Text>
           </TouchableOpacity>
           {steps !== null && (
@@ -565,6 +626,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 8,
     alignItems: 'center',
+    marginBottom: 10,
+  },
+  simpleTestButton: {
+    backgroundColor: '#4ECDC4',
   },
   testButtonText: {
     color: '#fff',

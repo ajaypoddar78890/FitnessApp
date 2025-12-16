@@ -398,6 +398,34 @@ Your backend API should provide the following endpoints:
    - Verify notification credentials in Expo
    - Test on physical device (not simulator)
 
+## 🏃‍♀️ Health Connect Integration
+
+This app integrates with **Google Health Connect** for advanced fitness tracking features like step counting.
+
+### Requirements:
+- **Android 8.0 (API 26)** or higher
+- **Health Connect App**:
+  - Android 14+: Built into the system (no additional download needed)
+  - Android 13 and below: Download from [Google Play Store](https://play.google.com/store/apps/details?id=com.google.android.apps.healthdata)
+
+### Features Available with Health Connect:
+- ✅ Real-time step counting
+- ✅ Daily activity tracking
+- ✅ Integration with other fitness apps
+- ✅ Secure health data management
+
+### Without Health Connect:
+- ⚠️ Basic app functionality still works
+- ⚠️ Manual workout logging available
+- ⚠️ Step counting not available
+- ℹ️ App will guide users to install Health Connect when needed
+
+### Privacy & Security:
+- Health Connect manages all permissions centrally
+- Users control which apps can access their health data
+- Data stays on-device and under user control
+- No health data is sent to our servers
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.

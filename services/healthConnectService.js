@@ -11,11 +11,11 @@ try {
 class HealthConnectService {
   constructor() {
     this.isInitialized = false;
-    this.isAvailable = !!healthConnectFunctions;
+    this.moduleAvailable = !!healthConnectFunctions;
   }
 
   async initializeHealthConnect() {
-    if (!this.isAvailable) {
+    if (!this.moduleAvailable) {
       throw new Error('Health Connect module is not available. Please check if the package is properly installed and linked.');
     }
 
@@ -48,17 +48,27 @@ class HealthConnectService {
   }
 
   async requestPermissions() {
-    if (!this.isAvailable) {
+    if (!this.moduleAvailable) {
       throw new Error('Health Connect module is not available.');
     }
 
     try {
       if (!this.isInitialized) {
+        console.log('Initializing Health Connect before requesting permissions...');
         await this.initializeHealthConnect();
       }
 
       console.log('Requesting Health Connect permissions...');
+      
+      // Add timeout and additional error handling
       const { requestPermission } = healthConnectFunctions;
+      
+      // Check if requestPermission function exists
+      if (!requestPermission) {
+        throw new Error('Permission request function not available in Health Connect module');
+      }
+
+      console.log('Calling requestPermission with Steps access...');
       const grantedPermissions = await requestPermission([
         {
           accessType: 'read',
@@ -72,16 +82,24 @@ class HealthConnectService {
         throw new Error('Permissions not granted. Please allow Health Connect to access your step data.');
       }
 
-      console.log('Health Connect permissions granted');
+      console.log('Health Connect permissions granted successfully');
       return true;
     } catch (error) {
       console.error('Failed to request permissions:', error);
-      throw error;
+      
+      // Provide more specific error messages
+      if (error.message.includes('User cancelled')) {
+        throw new Error('Permission request was cancelled by user');
+      } else if (error.message.includes('denied')) {
+        throw new Error('Permissions were denied. Please grant access in Health Connect settings');
+      } else {
+        throw new Error(`Permission request failed: ${error.message}`);
+      }
     }
   }
 
   async getStepsData(startDate, endDate) {
-    if (!this.isAvailable) {
+    if (!this.moduleAvailable) {
       throw new Error('Health Connect module is not available.');
     }
 
@@ -120,23 +138,28 @@ class HealthConnectService {
     return await this.getStepsData(startOfDay, endOfDay);
   }
 
-  async openSettings() {
-    if (!this.isAvailable) {
-      throw new Error('Health Connect module is not available.');
-    }
-
+  async openHealthConnectPlayStore() {
+    const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.google.android.apps.healthdata';
+    
+    // For React Native, we can use Linking to open URLs
+    const Linking = require('react-native').Linking;
+    
     try {
-      const { openHealthConnectSettings } = healthConnectFunctions;
-      await openHealthConnectSettings();
+      await Linking.openURL(playStoreUrl);
     } catch (error) {
-      console.error('Failed to open Health Connect settings:', error);
-      throw error;
+      console.error('Failed to open Play Store:', error);
+      // Fallback: try to open in browser
+      try {
+        await Linking.openURL(`market://details?id=com.google.android.apps.healthdata`);
+      } catch (fallbackError) {
+        console.error('Failed to open Play Store fallback:', fallbackError);
+      }
     }
   }
 
   // Check if Health Connect is available
   async isAvailable() {
-    if (!this.isAvailable) {
+    if (!this.moduleAvailable) {
       return false;
     }
 
@@ -147,7 +170,25 @@ class HealthConnectService {
 
       const { getSdkStatus } = healthConnectFunctions;
       const status = await getSdkStatus();
-      return status === 'INSTALLED';
+      console.log('Health Connect SDK status:', status);
+      
+      // Handle different status codes
+      if (status === 0 || status === 'NOT_INSTALLED') {
+        console.log('Health Connect is not installed');
+        return false;
+      } else if (status === 1 || status === 'NOT_SUPPORTED') {
+        console.log('Health Connect is not supported on this device');
+        return false;
+      } else if (status === 2 || status === 'SDK_UNAVAILABLE_PROVIDER_UPDATE_REQUIRED') {
+        console.log('Health Connect provider update required');
+        return false;
+      } else if (status === 3 || status === 'SDK_AVAILABLE') {
+        console.log('Health Connect is installed and available');
+        return true;
+      } else {
+        console.log('Unknown Health Connect status:', status, '- treating as not available');
+        return false;
+      }
     } catch (error) {
       console.error('Error checking Health Connect availability:', error);
       return false;

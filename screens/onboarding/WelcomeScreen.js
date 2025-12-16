@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import {
+    ActivityIndicator,
+    Alert,
     Dimensions,
     SafeAreaView,
     StyleSheet,
     Text,
     TouchableOpacity,
     View,
-    Alert,
-    ActivityIndicator,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { healthConnectService } from '../../services';
